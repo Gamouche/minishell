@@ -33,7 +33,6 @@ char				*read_user_input(void)
 	char	tmp[500];
 	ssize_t	ret_read;
 	char	*final_str;
-	//char	*tmp_ptr;
 	size_t	size;
 	size_t	old_size;
 
@@ -44,31 +43,13 @@ char				*read_user_input(void)
 	{
 		if ( (ret_read = read(STDOUT_FILENO, tmp, sizeof(tmp) - 1)) == -1 )
 			my_exit(FATAL_ERROR, "Call to read() failed\n");
-
 		tmp[ret_read] = '\0';
-
-		
-		
 		size += ret_read;
-
 		alloc_and_store(&final_str, old_size, size, tmp);
-/*
-		tmp_ptr = final_str;
-		if ( (final_str = ft_realloc(final_str, old_size + 1, size + 1)) == NULL )
-			my_exit(FATAL_ERROR, "Call to malloc() failed\n");
-		if (tmp_ptr == NULL)
-			final_str[0] = '\0';
-		ft_strcat(final_str, tmp);
-*/
-
-
 		old_size = size;
-
 		if (tmp[ret_read - 1] == '\n')
 			break ;
-
 	}
-
 	return (final_str);
 }
 
@@ -80,7 +61,13 @@ struct s_msh_cmd	*get_cmd(void)
 	//ll_cmd = ft_malloc(sizeof(struct s_msh_cmd), FATAL_ERROR);
 	cmd_input = read_user_input();
 	cmd_input[ft_strlen(cmd_input) - 1] = '\0';
+
+
+	write(1, "|", 1);
+	write(1, cmd_input, ft_strlen(cmd_input));
+	write(1, "|\n", 2);
 	
+	// mtn que jai l'input, je dois la parser et la stocker dans une liste.
 
 	free(cmd_input);
 

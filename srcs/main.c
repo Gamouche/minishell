@@ -27,7 +27,7 @@ void	msh_loop(void)
 
 
 
-		free(ll_cmd); // pour linstant cest ici
+		
 
 		break ; // dsjifoiewf
 	}
