@@ -1,0 +1,34 @@
+malloc
+free
+access ;
+open
+close
+read
+write
+opendir
+readdir
+closedir
+getcwd ;
+chdir ;
+stat
+lstat
+fstat
+fort ;
+execve ;
+wait ;
+waitpid ;
+wait3 ;
+wait4 ;
+signal ;  renvoie SIG_ERR en cas d'erreur
+kill ;
+exit
+
+
+echo, cd, setenv, unsetenv, env, exit
+
+
+
+
+
+
+
