@@ -40,7 +40,7 @@ char				*read_user_input(void)
 	old_size = 0;
 	while (1)
 	{
-		if ( (ret_read = read(STDOUT_FILENO, tmp, sizeof(tmp) - 1)) == -1 )
+		if ( (ret_read = read(STDIN_FILENO, tmp, sizeof(tmp) - 1)) == -1 )
 			ft_exit(FATAL_ERROR, "Call to read() failed\n");
 		tmp[ret_read] = '\0';
 		size += ret_read;
