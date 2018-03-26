@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+//  ls & pwd   petage de ca ble //  ls && ls -lR //  ls ; && ls // ls "serge.&&.c" ; pwd // ;
+// les commentaires genre ls #commentare
+ 
 #include <stdlib.h>
 #include "../includes/minishell.h"
 
@@ -35,6 +38,11 @@ void debug_print_list(struct s_msh_cmd *ptr)
 				printf("DEFAULT\n");
 				break ;
 		}
+
+		if (ptr->args_cmd)
+			for (int i = 0 ; (ptr->args_cmd)[i] ; ++i)
+				printf("ARG = |%s|\n", (ptr->args_cmd)[i]);
+
 		ptr = ptr->next;
 		printf("\n");
 	}
@@ -46,6 +54,41 @@ int is_not_sep(int c) { return (ft_strchr(MSH_CMD_SEPARATORS, c) == NULL);  }
 // dans terminal faire "ls &&" ca demande a taper la cmd suivante, a reproduire ?
 
 //  ls -l;  pwd  && ls&&pwd;ls -l -a libft ;
+
+void	argument(struct s_msh_cmd *ll, const char *s)
+{
+	static int 	nb = 0;
+	char		**tab_tmp;
+
+	if (ll->args_cmd == NULL)
+	{
+											printf("PREMIER ARG A ALLOUER = |%s|\n", s); // jksfdhgkjs
+		ll->args_cmd = malloc(sizeof(char *) * 2); // dsvs
+		(ll->args_cmd)[1] = NULL;
+		*(ll->args_cmd) = ft_strdup(s); // fzdz
+		nb = 1;
+	}
+	else
+	{
+											//printf("PAS PREMIER ARG A ALLOUER\n");
+		nb += 1;
+		tab_tmp = ll->args_cmd;				printf("ALLOCATION POUR %d ARGS\n", nb);
+		ll->args_cmd = malloc(sizeof(char *) * (nb + 1)); // isdgr
+		(ll->args_cmd)[nb] = NULL;
+		(ll->args_cmd)[nb - 1] = ft_strdup(s); // kjfjsrd 
+
+		for (int i = 0 ; i < nb - 1 ; ++i)
+		{
+											//printf("DUP DE LARG |%s|\n",tab_tmp[i] );
+			(ll->args_cmd)[i] = ft_strdup(tab_tmp[i]); // khdgddsf
+			free(tab_tmp[i]);
+		}
+
+		free(tab_tmp);
+
+	}
+	
+}
 
 struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 {
@@ -62,7 +105,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 	cur_ll = ll_cmd;
 
 
-													printf("input = |%s|\n", cmd_input); //return 0;// djsrhuiewhr
+													//printf("input = |%s|\n", cmd_input); //return 0;// djsrhuiewhr
 
 	while (*cmd_input != '\0')
 	{
@@ -85,7 +128,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		i = 0;
 		while (*cmd_input != ';' && *cmd_input != '&'
 		&& is_not_sep(*cmd_input)
-		&& *cmd_input != '\0')
+		&& *cmd_input != '\0') 
 		{
 			tmp[i] = *cmd_input;
 			++i;
@@ -94,12 +137,12 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		tmp[i] = '\0';
 
 													printf("tmp = |%s|\n", tmp); // dsrce
-		if (cur_ll->cmd == NULL && tmp[0] != '\0')
+		if (cur_ll->cmd == NULL && tmp[0] != '\0') // si cest le premier mot de la cmd en fait
 			cur_ll->cmd = ft_strdup(tmp); // protect
 		else if (tmp[0] != '\0')
-			printf("ARGUMENT\n");
-		else
-			printf("RIEN\n");
+			argument(cur_ll, tmp);
+		else ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+			//printf("RIEN\n");
 		
 
 		if (*cmd_input == '\0')
@@ -119,6 +162,8 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		}
 		else if (*cmd_input == '&')
 		{																			printf("IF AND\n");
+			if (*(cmd_input + 1) != '&')
+				return (PARSE_ERROR);
 			connec = MSH_CON_AND;
 			new = 1;
 			cmd_input += 2;
@@ -142,7 +187,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		}
 
 
-		printf("\n=> %s\n", cmd_input);
+		//printf("\n=> %s\n", cmd_input);
 		//getchar(); // dsklfjr
 	}
 
@@ -165,6 +210,8 @@ struct s_msh_cmd	*get_cmd(void)
 		return (CMD_EMPTY);
 	
 	ll_cmd = get_cmd_list(cmd_input);
+	if (ll_cmd == PARSE_ERROR)
+		ft_exit(FATAL_ERROR, "PARSE ERROR\n");
 
 	debug_print_list(ll_cmd); // dsofjkef
 

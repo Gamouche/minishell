@@ -21,6 +21,7 @@
 # define FATAL_ERROR (2)
 # define MSH_CMD_SEPARATORS (char[4]){0x20, 0x09, 0x0a, 0x00}
 # define CMD_EMPTY ((struct s_msh_cmd *)(-1))
+# define PARSE_ERROR ((struct s_msh_cmd *)(-2))
 
 enum e_msh_connection
 {
