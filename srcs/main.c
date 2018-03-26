@@ -13,13 +13,23 @@
 #include <stdlib.h>
 #include "../includes/minishell.h"
 
+void	msh_prompt(void)
+{
+	write(STDOUT_FILENO, "SERGE $> ", 9); // protect
+}
+
 void	msh_loop(void)
 {
 	struct s_msh_cmd *ll_cmd;
 
 	while (42)
 	{
+		msh_prompt();
+
 		ll_cmd = get_cmd(); // lit la cmd et cree la liste chainee correspondante / renvoie un ptr sur le premier node la ll
+
+		if (ll_cmd == CMD_EMPTY)
+			continue ;
 
 		// func_exec()   execute les cmd de la liste chainee
 

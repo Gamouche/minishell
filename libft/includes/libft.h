@@ -105,5 +105,7 @@ int					ft_vasprintf(char **ret, const char *format, va_list ap);
 
 void				*ft_malloc(size_t len, int exit_value);
 char				*ft_itoa2(int64_t n, char *str);
+void				ft_exit(int exit_value, const char *msg);
+char				**ft_strsplit_bystr(const char *s, const char *split);
 
 #endif

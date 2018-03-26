@@ -18,7 +18,9 @@
 
 					#include <stdio.h> // debuggggggg
 
-# define FATAL_ERROR 2
+# define FATAL_ERROR (2)
+# define MSH_CMD_SEPARATORS (char[4]){0x20, 0x09, 0x0a, 0x00}
+# define CMD_EMPTY ((struct s_msh_cmd *)(-1))
 
 enum e_msh_connection
 {
@@ -32,9 +34,12 @@ struct s_msh_cmd
 	char					*cmd;
 	char					**args_cmd;
 	enum e_msh_connection 	connection;
+	struct s_msh_cmd		*next;
 };
 
 struct 	s_msh_cmd	*get_cmd(void);
-void	my_exit(int exit_value, const char *msg);
+char				*read_user_input(void);
+struct s_msh_cmd	*get_cmd_list(const char *cmd_input);
+
 
 #endif

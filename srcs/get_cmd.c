@@ -11,65 +11,164 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <unistd.h>
 #include "../includes/minishell.h"
 
-static void			alloc_and_store(char **final_str, size_t old_size, size_t size, char tmp[])
+void debug_print_list(struct s_msh_cmd *ptr)
 {
-	char	*tmp_ptr;
-
-	tmp_ptr = *final_str;
-	if ( (*final_str = ft_realloc(*final_str, old_size + 1, size + 1)) == NULL )
-		my_exit(FATAL_ERROR, "Call to malloc() failed\n");
-	if (tmp_ptr == NULL)
-		(*final_str)[0] = '\0';
-	ft_strcat(*final_str, tmp);
-}
-
-char				*read_user_input(void)
-{
-	char	tmp[500];
-	ssize_t	ret_read;
-	char	*final_str;
-	size_t	size;
-	size_t	old_size;
-
-	final_str = NULL;
-	size = 0;
-	old_size = 0;
-	while (1)
+	printf("\n----------\tLISTE\n");
+	while (ptr != NULL)
 	{
-		if ( (ret_read = read(STDOUT_FILENO, tmp, sizeof(tmp) - 1)) == -1 )
-			my_exit(FATAL_ERROR, "Call to read() failed\n");
-		tmp[ret_read] = '\0';
-		size += ret_read;
-		alloc_and_store(&final_str, old_size, size, tmp);
-		old_size = size;
-		if (tmp[ret_read - 1] == '\n')
-			break ;
+		printf("cmd = |%s|\n", ptr->cmd);
+		printf("connec = ");
+		switch (ptr->connection)
+		{
+			case (MSH_CON_NONE) :
+				printf("NONE\n");
+				break ;
+			case (MSH_CON_AND) :
+				printf("AND\n");
+				break ;
+			case (MSH_CON_SEMICOLON) :
+				printf("SEMICOLON\n");
+				break ;
+			default :
+				printf("DEFAULT\n");
+				break ;
+		}
+		ptr = ptr->next;
+		printf("\n");
 	}
-	return (final_str);
 }
+
+int is_sep(int c) { return (ft_strchr(MSH_CMD_SEPARATORS, c) != NULL);  }
+int is_not_sep(int c) { return (ft_strchr(MSH_CMD_SEPARATORS, c) == NULL);  }
+
+// dans terminal faire "ls &&" ca demande a taper la cmd suivante, a reproduire ?
+
+//  ls -l;  pwd  && ls&&pwd;ls -l -a libft ;
+
+struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
+{
+	struct s_msh_cmd		*ll_cmd;
+	struct s_msh_cmd		*cur_ll;
+	char					tmp[1024];
+	size_t					i;
+	enum e_msh_connection	connec;
+	int						new = 0;
+
+	// on sait ici que l'input nest pas vide, on cree donc un premier element pour la liste.
+	ll_cmd = malloc(sizeof(struct s_msh_cmd)); // dsfw
+	ll_cmd->cmd = NULL; ll_cmd->args_cmd = NULL ; ll_cmd->connection = MSH_CON_NONE ; ll_cmd->next = NULL;
+	cur_ll = ll_cmd;
+
+
+													printf("input = |%s|\n", cmd_input); //return 0;// djsrhuiewhr
+
+	while (*cmd_input != '\0')
+	{
+		if (new)
+		{
+																	printf("\t\tCREATION\n");
+			struct s_msh_cmd	*new_elem;
+			new_elem = malloc(sizeof(*new_elem)); // protect
+			new_elem->cmd = NULL;
+			new_elem->args_cmd = NULL;
+			new_elem->connection = connec;
+			new_elem->next = NULL;
+
+			cur_ll->next = new_elem;
+			cur_ll = new_elem;
+		}
+
+
+		connec = MSH_CON_NONE;
+		i = 0;
+		while (*cmd_input != ';' && *cmd_input != '&'
+		&& is_not_sep(*cmd_input)
+		&& *cmd_input != '\0')
+		{
+			tmp[i] = *cmd_input;
+			++i;
+			++cmd_input;
+		}
+		tmp[i] = '\0';
+
+													printf("tmp = |%s|\n", tmp); // dsrce
+		if (cur_ll->cmd == NULL && tmp[0] != '\0')
+			cur_ll->cmd = ft_strdup(tmp); // protect
+		else if (tmp[0] != '\0')
+			printf("ARGUMENT\n");
+		else
+			printf("RIEN\n");
+		
+
+		if (*cmd_input == '\0')
+			break ;
+		else if (*cmd_input == ';')
+		{																			printf("IF SEMICOLON\n");
+			connec = MSH_CON_SEMICOLON;
+			new = 1;
+			while ( is_sep(*cmd_input) || *cmd_input == ';' )
+			{
+				if (*cmd_input == '\0')
+					break ;
+				//printf("## %x\n", *cmd_input);  getchar();
+				++cmd_input;
+			}
+
+		}
+		else if (*cmd_input == '&')
+		{																			printf("IF AND\n");
+			connec = MSH_CON_AND;
+			new = 1;
+			cmd_input += 2;
+			while ( is_sep(*cmd_input) )
+			{
+				if (*cmd_input == '\0')
+					break ;
+				++cmd_input;
+			}
+
+		}
+		else if ( is_sep(*cmd_input) )
+		{																			printf("IF SEP\n");
+			new = 0;
+			while ( is_sep(*cmd_input) )
+				++cmd_input;
+		}
+		else
+		{
+																					printf("\t\t\t\tIF VIDE MDRRRRRR\n");
+		}
+
+
+		printf("\n=> %s\n", cmd_input);
+		//getchar(); // dsklfjr
+	}
+
+
+
+
+	return (ll_cmd);
+}
+
 
 struct s_msh_cmd	*get_cmd(void)
 {
 	struct s_msh_cmd 	*ll_cmd;
 	char				*cmd_input;
 
-	//ll_cmd = ft_malloc(sizeof(struct s_msh_cmd), FATAL_ERROR);
 	cmd_input = read_user_input();
+
 	cmd_input[ft_strlen(cmd_input) - 1] = '\0';
-
-
-	write(1, "|", 1);
-	write(1, cmd_input, ft_strlen(cmd_input));
-	write(1, "|\n", 2);
+	if (cmd_input[0] == '\0')
+		return (CMD_EMPTY);
 	
-	// mtn que jai l'input, je dois la parser et la stocker dans une liste.
+	ll_cmd = get_cmd_list(cmd_input);
+
+	debug_print_list(ll_cmd); // dsofjkef
 
 	free(cmd_input);
 
-	return 0;
+	return (ll_cmd);
 }

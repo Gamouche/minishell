@@ -89,6 +89,8 @@ FILES = ft_strlen.c \
 		  ft_get2arg.c \
 		  ft_int_to_nbase.c \
 		  ft_abs.c \
+		  ft_exit.c \
+		  ft_strsplit_bystr.c \
 		  ft_printf/srcs/printf/ft_printf.c \
 		  ft_printf/srcs/printf/ft_vprintf.c \
 		  ft_printf/srcs/printf/ft_dprintf.c \
@@ -142,7 +144,7 @@ HFILES = includes/ft_printf.h \
 		 includes/libft.h
 
 CC = gcc
-CFLAGS = -Wall -Wextra ##-Werror -Ofast
+CFLAGS = -Wall -Wextra -Werror -O3  
 
 INC_DIR = includes/
 SRCS_DIR = srcs/
@@ -196,12 +198,4 @@ fclean: clean
 re: fclean
 	@make
 
-exec:
-	@clear
-	@make all
-	@$(CC) ../main.c -lmlx -framework OpenGL -framework AppKit -o ../fdf $(INC) -L . $(CFLAGS) -lft
-	@printf $(MAGENTA)"FDF\n--------------------\n"$(NORMAL)
-	@../fdf
-	@printf $(MAGENTA)"--------------------\n"$(NORMAL)
-
-.PHONY: all clean fclean re exec
+.PHONY: all clean fclean re

@@ -13,7 +13,7 @@ chdir ;
 stat
 lstat
 fstat
-fort ;
+fork ;
 execve ;
 wait ;
 waitpid ;
