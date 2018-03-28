@@ -88,7 +88,7 @@ void debug_print_list(struct s_msh_cmd *ptr)
 		printf("\n");
 	}
 }
-
+// cmd1 un deux trois;cmd2 un deux       trois&&cmd3 un deux trois||cmd4 un    deux trois  ;
 int is_sep(int c) { return (ft_strchr(MSH_CMD_SEPARATORS, c) != NULL);  }
 int is_not_sep(int c) { return (ft_strchr(MSH_CMD_SEPARATORS, c) == NULL);  }
 
@@ -103,7 +103,7 @@ void	argument(struct s_msh_cmd *ll, const char *s)
 
 	if (ll->args_cmd == NULL)
 	{
-											printf("PREMIER ARG A ALLOUER = |%s|\n", s); // jksfdhgkjs
+											//printf("PREMIER ARG A ALLOUER = |%s|\n", s); // jksfdhgkjs
 		ll->args_cmd = malloc(sizeof(char *) * 2); // dsvs
 		(ll->args_cmd)[1] = NULL;
 		*(ll->args_cmd) = ft_strdup(s); // fzdz
@@ -113,7 +113,7 @@ void	argument(struct s_msh_cmd *ll, const char *s)
 	{
 											//printf("PAS PREMIER ARG A ALLOUER\n");
 		nb += 1;
-		tab_tmp = ll->args_cmd;				printf("ALLOCATION POUR %d ARGS\n", nb);
+		tab_tmp = ll->args_cmd;				//printf("ALLOCATION POUR %d ARGS\n", nb);
 		ll->args_cmd = malloc(sizeof(char *) * (nb + 1)); // isdgr
 		(ll->args_cmd)[nb] = NULL;
 		(ll->args_cmd)[nb - 1] = ft_strdup(s); // kjfjsrd 
@@ -157,7 +157,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 	{
 		if (new)
 		{
-																	printf("\t\tCREATION\n");
+																	//printf("\t\tCREATION\n");
 			struct s_msh_cmd	*new_elem;
 			new_elem = malloc(sizeof(*new_elem)); // protect
 			new_elem->cmd = NULL;
@@ -182,7 +182,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		}
 		tmp[i] = '\0';
 
-													printf("tmp = |%s|\n", tmp); // dsrce
+													//printf("tmp = |%s|\n", tmp); // dsrce
 		if (cur_ll->cmd == NULL && tmp[0] != '\0') // si cest le premier mot de la cmd en fait
 			cur_ll->cmd = ft_strdup(tmp); // protect
 		else if (tmp[0] != '\0')
@@ -194,7 +194,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		if (*cmd_input == '\0')
 			break ;
 		else if (*cmd_input == ';')
-		{																			printf("IF SEMICOLON\n");
+		{																			//printf("IF SEMICOLON\n");
 			connec = MSH_CON_SEMICOLON;
 			new = 1;
 			while ( is_sep(*cmd_input) || *cmd_input == ';' )
@@ -207,7 +207,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 
 		}
 		else if (*cmd_input == '&')
-		{																			printf("IF AND\n");
+		{																			//printf("IF AND\n");
 			//if (*(cmd_input + 1) != '&')
 				//return (PARSE_ERROR);
 			connec = MSH_CON_AND;
@@ -222,7 +222,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 
 		}
 		else if (*cmd_input == '|')
-		{																			printf("IF OR\n");
+		{																			//printf("IF OR\n");
 			connec = MSH_CON_OR;
 			new = 1;
 			cmd_input += 2;
@@ -234,7 +234,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 			}
 		}
 		else if ( is_sep(*cmd_input) )
-		{																			printf("IF SEP\n");
+		{																			//printf("IF SEP\n");
 			new = 0;
 			while ( is_sep(*cmd_input) )
 			{
@@ -245,7 +245,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		}
 		else
 		{
-																					printf("\t\t\t\tIF VIDE MDRRRRRR\n");
+																					//printf("\t\t\t\tIF VIDE MDRRRRRR\n");
 		}
 
 

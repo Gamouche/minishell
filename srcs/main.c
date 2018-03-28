@@ -46,7 +46,7 @@ void	msh_loop(void)
 
 		ll_cmd = get_cmd(); // lit la cmd et cree la liste chainee correspondante / renvoie un ptr sur le premier node la ll
 
-		if (ll_cmd == CMD_EMPTY)
+		if (ll_cmd == CMD_EMPTY || ll_cmd == PARSE_ERROR)
 			continue ;
 
 		// func_exec()   execute les cmd de la liste chainee
