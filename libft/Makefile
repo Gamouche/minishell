@@ -135,7 +135,8 @@ FILES = ft_strlen.c \
 		  ft_printf/srcs/conv/ft_conv_invalid.c \
 		  ft_printf/srcs/conv/ft_regle_zero.c \
 		  ft_printf/srcs/conv/ft_arrondis_f.c \
-		  ft_printf/srcs/ft_strfreejoin.c 
+		  ft_printf/srcs/ft_strfreejoin.c \
+		  ft_isspace.c
 		  
 
 HFILES = includes/ft_printf.h \

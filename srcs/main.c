@@ -32,7 +32,8 @@ void	func_destroy_list(struct s_msh_cmd *ll)
 
 void	msh_prompt(void)
 {
-	write(STDOUT_FILENO, "SERGE $> ", 9); // protect
+	const char *prompt = "\e[1m\x1B[32mSERGE $> \x1B[0m";
+	ft_putstr(prompt);
 }
 
 void	msh_loop(void)
@@ -56,7 +57,7 @@ void	msh_loop(void)
 
 		
 
-		break ; // dsjifoiewf
+		//break ; // dsjifoiewf
 	}
 
 

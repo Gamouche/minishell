@@ -10,18 +10,52 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//  ls & pwd   petage de ca ble //  ls && ls -lR //  ls ; && ls // ls "serge.&&.c" ; pwd // ;
-// les commentaires genre ls #commentare
- // ./minishell <<< $(echo -n -e "\x00")
- // promp> plein d'espaces
-
- // ./minishell <<<".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
- 
 #include <stdlib.h>
+#include <stdbool.h>
 #include "../includes/minishell.h"
+
+bool	input_is_valid(const char *input)
+{
+	while (*input != '\0')
+	{
+		if (*input == '&')
+		{
+			if (*(input + 1) != '&')
+				return (false);
+			++input;
+		}
+		if (*input == ';' && *(input + 1) == ';')
+			return (false);
+		if (*input == '|')
+		{
+			if (*(input + 1) != '|')
+				return (false);
+			++input;
+		}
+
+		++input;
+	}
+
+	return (true);
+}
+
+bool	check_if_input_is_full_blank(const char *input)
+{
+	while (*input != '\0' && ft_isspace(*input))
+		++input;
+	if (*input == '\0')
+		return (true);
+	return (false);
+}
 
 void debug_print_list(struct s_msh_cmd *ptr)
 {
+	if (ptr == 00)
+	{
+		printf("\n----------\tPAS DE LISTE\n");
+		return ;
+	}
+
 	printf("\n----------\tLISTE\n");
 	while (ptr != NULL)
 	{
@@ -37,6 +71,9 @@ void debug_print_list(struct s_msh_cmd *ptr)
 				break ;
 			case (MSH_CON_SEMICOLON) :
 				printf("SEMICOLON\n");
+				break ;
+			case (MSH_CON_OR) :
+				printf("OR\n");
 				break ;
 			default :
 				printf("DEFAULT\n");
@@ -103,6 +140,11 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 	enum e_msh_connection	connec;
 	int						new = 0;
 
+	if (cmd_input[0] == '\0' || check_if_input_is_full_blank(cmd_input) == true )
+		return (CMD_EMPTY);
+	if ( input_is_valid(cmd_input) == false )
+		return (PARSE_ERROR);
+
 	// on sait ici que l'input nest pas vide, on cree donc un premier element pour la liste.
 	ll_cmd = malloc(sizeof(struct s_msh_cmd)); // dsfw
 	ll_cmd->cmd = NULL; ll_cmd->args_cmd = NULL ; ll_cmd->connection = MSH_CON_NONE ; ll_cmd->next = NULL;
@@ -130,7 +172,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 
 		connec = MSH_CON_NONE;
 		i = 0;
-		while (*cmd_input != ';' && *cmd_input != '&'
+		while (*cmd_input != ';' && *cmd_input != '&' && *cmd_input != '|'
 		&& is_not_sep(*cmd_input)
 		&& *cmd_input != '\0') 
 		{
@@ -145,8 +187,8 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 			cur_ll->cmd = ft_strdup(tmp); // protect
 		else if (tmp[0] != '\0')
 			argument(cur_ll, tmp);
-		else ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-			//printf("RIEN\n");
+		else //;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+			printf("RIEN\n");
 		
 
 		if (*cmd_input == '\0')
@@ -166,8 +208,8 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		}
 		else if (*cmd_input == '&')
 		{																			printf("IF AND\n");
-			if (*(cmd_input + 1) != '&')
-				return (PARSE_ERROR);
+			//if (*(cmd_input + 1) != '&')
+				//return (PARSE_ERROR);
 			connec = MSH_CON_AND;
 			new = 1;
 			cmd_input += 2;
@@ -179,11 +221,27 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 			}
 
 		}
+		else if (*cmd_input == '|')
+		{																			printf("IF OR\n");
+			connec = MSH_CON_OR;
+			new = 1;
+			cmd_input += 2;
+			while ( is_sep(*cmd_input) )
+			{
+				if (*cmd_input == '\0')
+					break ;
+				++cmd_input;
+			}
+		}
 		else if ( is_sep(*cmd_input) )
 		{																			printf("IF SEP\n");
 			new = 0;
 			while ( is_sep(*cmd_input) )
+			{
+				if (*cmd_input == '\0')
+					break ;
 				++cmd_input;
+			}
 		}
 		else
 		{
@@ -191,7 +249,7 @@ struct s_msh_cmd	*get_cmd_list(const char *cmd_input)
 		}
 
 
-		//printf("\n=> %s\n", cmd_input);
+		printf("\n=> %s\n", cmd_input);
 		//getchar(); // dsklfjr
 	}
 
@@ -209,13 +267,16 @@ struct s_msh_cmd	*get_cmd(void)
 
 	cmd_input = read_user_input();
 
-	cmd_input[ft_strlen(cmd_input) - 1] = '\0';
-	if (cmd_input[0] == '\0')
-		return (CMD_EMPTY);
+	cmd_input[ft_strlen(cmd_input) - 1] = '\0';					if (ft_strcmp(cmd_input, "exit") == 0) exit(42); // jkjhouew
 	
 	ll_cmd = get_cmd_list(cmd_input);
 	if (ll_cmd == PARSE_ERROR)
-		ft_exit(FATAL_ERROR, "PARSE ERROR\n");
+	{
+		ft_putstr_fd("minishell: parse error in command line input\n", STDERR_FILENO);
+		return (NULL);
+	}
+	else if (ll_cmd == CMD_EMPTY)
+		return (CMD_EMPTY);
 
 	debug_print_list(ll_cmd); // dsofjkef
 

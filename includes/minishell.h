@@ -27,7 +27,8 @@ enum e_msh_connection
 {
 	MSH_CON_NONE,
 	MSH_CON_SEMICOLON,
-	MSH_CON_AND
+	MSH_CON_AND,
+	MSH_CON_OR
 };
 
 struct s_msh_cmd
