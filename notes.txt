@@ -26,9 +26,19 @@ exit
 
 echo, cd, setenv, unsetenv, env, exit
 
+ERREURS
+
+pwd &&
+suite - ; pwd   => doit marcher (cmd2 en fonction du AND)
 
 
+--------
+ls rien && ;ls || pwd // le parseur marche, mais pour les executions : le premier ls se lance et foire, le second ls n'est pas lance mais le pwd oui !
+--------
 
-
-
-
+CAS CHELOU BONUS
+"&&"
+"||"
+";"
+"CMD"
+'CMD'
