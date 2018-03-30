@@ -21,7 +21,7 @@ int is_not_sep(int c) { return (ft_strchr(MSH_CMD_SEPARATORS, c) == NULL);  }
 
 
 void	arrangement_de_cas_special(char *input)
-{
+{													printf("\t\t\t -- FUNCTION ARRANGEMENT sur |%s|\n", input);
 	while (*input != 0)
 	{
 		if (*input == '&' || *input == '|')
@@ -38,7 +38,18 @@ void	arrangement_de_cas_special(char *input)
 			if (*input == 0)
 				return ;
 			else if (*input == ';')
+			{				printf("\t\t\t---ARRANGEMENT\n"); // dsl;ktds
 				*input = ' ';
+				while (*input != 0)
+				{
+					if ( is_sep(*input) )
+						++input;
+					if (*input == ';')
+						*input = ' ';
+					if ( (is_not_sep(*input) && *input != ';') || *input == 0 )
+						return ;
+				}
+			}
 		}
 
 		++input;
@@ -242,6 +253,46 @@ void	argument(struct s_msh_cmd *ll, const char *s)
 	
 }
 
+struct s_msh_cmd	*init_first_node(void)
+{
+	struct s_msh_cmd	*ll_cmd;
+
+	ll_cmd = ft_malloc(sizeof(struct s_msh_cmd), FATAL_ERROR);
+	ll_cmd->cmd = NULL;
+	ll_cmd->args_cmd = NULL;
+	ll_cmd->connection = MSH_CON_NONE;
+	ll_cmd->next = NULL;
+	return (ll_cmd);
+}
+
+struct s_msh_cmd	*skip_semicolon(char **cmd_input, struct s_msh_cmd *ll_cmd)
+{
+	if ((*cmd_input)[0] == ';') // passer les ; genre "; ; ; ; cmd" 
+	{
+		++(*cmd_input);
+		while ( is_sep(**cmd_input) )
+		{
+			if (**cmd_input == 0)
+			{
+				free(ll_cmd);
+				return (CMD_EMPTY);
+			}
+
+			++(*cmd_input);
+			if (**cmd_input == ';')
+			{
+				++(*cmd_input);
+				if (**cmd_input == 0)
+				{
+					free(ll_cmd);
+					return (CMD_EMPTY);
+				}
+			}
+		}
+	}
+	return (NULL);
+}
+
 struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 {
 	struct s_msh_cmd		*ll_cmd;
@@ -251,6 +302,7 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 	enum e_msh_connection	connec;
 	int						new = 0;
 	char					*keep = cmd_input;
+	//bool					check_func_ret;
 
 	if (cmd_input[0] == '\0' || check_if_input_is_full_blank(cmd_input) == true )
 		return (CMD_EMPTY);
@@ -259,18 +311,16 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 	arrangement_de_cas_special(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
 
 	// on sait ici que l'input nest pas vide, on cree donc un premier element pour la liste.
-	ll_cmd = malloc(sizeof(struct s_msh_cmd)); // dsfw
-	ll_cmd->cmd = NULL; ll_cmd->args_cmd = NULL ; ll_cmd->connection = MSH_CON_NONE ; ll_cmd->next = NULL;
+	ll_cmd = init_first_node();
 	cur_ll = ll_cmd;
 
-
 	while ( is_sep(*cmd_input) ) // passer les blancs genre "      xxxx"
-	{
 		++cmd_input;
-	}
 
+	if ( skip_semicolon(&cmd_input, ll_cmd) == CMD_EMPTY ) // passer les ; genre "; ; ; ; cmd" 
+		return (CMD_EMPTY);
 
-	if (cmd_input[0] == ';') // passer les ; genre "; ; ; ; cmd"
+	/*if (cmd_input[0] == ';') // passer les ; genre "; ; ; ; cmd" 
 	{
 		++cmd_input;
 		while ( is_sep(*cmd_input) )
@@ -292,9 +342,7 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 				}
 			}
 		}
-
-		//cmd_input = keep;
-	}
+	}*/
 
 	while (*cmd_input != '\0')
 	{
@@ -339,7 +387,7 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 			cmd_input = malloc( ft_strlen(tmp) + ft_strlen(suite_cmd) + 1 ); // dhfeow
 			cmd_input[0] = 0;
 
-			ft_strcat(cmd_input, tmp);
+			//ft_strcat(cmd_input, tmp);
 			ft_strcat(cmd_input, suite_cmd);
 			free(suite_cmd);
 			free(keep);
@@ -353,6 +401,18 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 				func_destroy_list(ll_cmd);
 				free(keep);
 				return (PARSE_ERROR);
+			}
+			arrangement_de_cas_special(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
+			while (*cmd_input != 0)
+			{
+				while (*cmd_input == 0x20 || *cmd_input == 0x09 || *cmd_input == 0x0a)
+					++cmd_input;
+				if (*cmd_input == 0)
+					break ;
+				if (*cmd_input == ';')
+					++cmd_input;
+				if ( is_not_sep(*cmd_input) )
+					break ;
 			}
 		}
 		else
@@ -391,7 +451,7 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 					cmd_input = malloc( ft_strlen(tmp) + ft_strlen(suite_cmd) + 1 ); // dhfeow
 					cmd_input[0] = 0;
 
-					ft_strcat(cmd_input, tmp);
+				//	ft_strcat(cmd_input, tmp);
 					ft_strcat(cmd_input, suite_cmd);
 					free(suite_cmd);
 					free(keep);
@@ -405,6 +465,18 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 						func_destroy_list(ll_cmd);
 						free(keep);
 						return (PARSE_ERROR);
+					}
+					arrangement_de_cas_special(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
+					while (*cmd_input != 0)
+					{
+						while (*cmd_input == 0x20 || *cmd_input == 0x09 || *cmd_input == 0x0a)
+							++cmd_input;
+						if (*cmd_input == 0)
+							break ;
+						if (*cmd_input == ';')
+							++cmd_input;
+						if ( is_not_sep(*cmd_input) )
+							break ;
 					}
 					break ;
 				}
@@ -429,7 +501,7 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 					cmd_input = malloc( ft_strlen(tmp) + ft_strlen(suite_cmd) + 1 ); // dhfeow
 					cmd_input[0] = 0;
 
-					ft_strcat(cmd_input, tmp);
+					//ft_strcat(cmd_input, tmp);
 					ft_strcat(cmd_input, suite_cmd);
 					free(suite_cmd);
 					free(keep);
@@ -443,6 +515,18 @@ struct s_msh_cmd	*get_cmd_list(char *cmd_input)
 						func_destroy_list(ll_cmd);
 						free(keep);
 						return (PARSE_ERROR);
+					}
+					arrangement_de_cas_special(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
+					while (*cmd_input != 0)
+					{
+						while (*cmd_input == 0x20 || *cmd_input == 0x09 || *cmd_input == 0x0a)
+							++cmd_input;
+						if (*cmd_input == 0)
+							break ;
+						if (*cmd_input == ';')
+							++cmd_input;
+						if ( is_not_sep(*cmd_input) )
+							break ;
 					}
 					break ;
 				}
@@ -486,7 +570,7 @@ struct s_msh_cmd	*get_cmd(void)
 	if (cmd_input[ft_strlen(cmd_input) - 1] == '\n')
 		cmd_input[ft_strlen(cmd_input) - 1] = '\0';		
 
-					if (ft_strcmp(cmd_input, "clear") == 0) system("clear");//else if (ft_strcmp(cmd_input, "qq") == 0) {free(cmd_input);exit(42);} // jkjhouew
+					if (ft_strcmp(cmd_input, "clear") == 0) system("clear");else if (ft_strcmp(cmd_input, "qq") == 0) {free(cmd_input);exit(42);} // jkjhouew
 	
 	ll_cmd = get_cmd_list(cmd_input);
 	if (ll_cmd == PARSE_ERROR)
