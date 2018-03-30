@@ -7,10 +7,10 @@ while [ $? -lt 127 ] && [ $i -ne 200 ];
 do
 	sleep $delay;
 	i=$[$i+1];
-	tmp=$(echo 64 | ./radamsa/bin/radamsa)
+	tmp=$(echo "&&" | ./radamsa/bin/radamsa)
 	printf "\033[31mTesting |%s||%s|\n\033[0m" "$tmp";
 	(echo "$tmp" | xxd) || true
-	./minishell <<< "$tmp";
+	./minishell <<< "$tmp && $tmp";
 done;
 
 if [ $i -eq 200 ];

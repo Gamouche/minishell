@@ -39,6 +39,13 @@ struct s_msh_cmd
 	struct s_msh_cmd		*next;
 };
 
+struct s_get_cmd_list_var_norme_lol
+{
+	char					*keep;
+	bool					need_new_node;
+	enum e_msh_connection	connec;
+};
+
 struct 	s_msh_cmd	*get_cmd(void);
 char				*read_user_input(void);
 struct s_msh_cmd	*get_cmd_list(char *cmd_input);

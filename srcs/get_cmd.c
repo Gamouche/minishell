@@ -20,8 +20,8 @@ int is_sep(int c) { return (ft_strchr(MSH_CMD_SEPARATORS, c) != NULL);  }
 int is_not_sep(int c) { return (ft_strchr(MSH_CMD_SEPARATORS, c) == NULL);  }
 
 
-void	arrangement_de_cas_special(char *input)
-{													printf("\t\t\t -- FUNCTION ARRANGEMENT sur |%s|\n", input);
+void	special_case_management(char *input)
+{													printf("\t\t\t -- FUNCTION ARRANGEMENT sur |%s|\n", input); // dfew
 	while (*input != 0)
 	{
 		if (*input == '&' || *input == '|')
@@ -253,7 +253,7 @@ void	argument(struct s_msh_cmd *ll, const char *s)
 	
 }
 
-struct s_msh_cmd	*init_first_node(void)
+struct s_msh_cmd	*init_first_node(struct s_msh_cmd **cur_ll)
 {
 	struct s_msh_cmd	*ll_cmd;
 
@@ -262,6 +262,7 @@ struct s_msh_cmd	*init_first_node(void)
 	ll_cmd->args_cmd = NULL;
 	ll_cmd->connection = MSH_CON_NONE;
 	ll_cmd->next = NULL;
+	*cur_ll = ll_cmd;
 	return (ll_cmd);
 }
 
@@ -293,269 +294,222 @@ struct s_msh_cmd	*skip_semicolon(char **cmd_input, struct s_msh_cmd *ll_cmd)
 	return (NULL);
 }
 
-struct s_msh_cmd	*get_cmd_list(char *cmd_input)
-{
-	struct s_msh_cmd		*ll_cmd;
-	struct s_msh_cmd		*cur_ll;
-	char					tmp[1024];
-	size_t					i;
-	enum e_msh_connection	connec;
-	int						new = 0;
-	char					*keep = cmd_input;
-	//bool					check_func_ret;
+void	create_new_node(struct s_msh_cmd **cur_ll, enum e_msh_connection connec)
+{									printf("\t\tCREATION\n"); // eergr
+	struct s_msh_cmd	*new_elem;
+				
+	new_elem = ft_malloc(sizeof(*new_elem), FATAL_ERROR);
+	new_elem->cmd = NULL;
+	new_elem->args_cmd = NULL;
+	new_elem->connection = connec;
+	new_elem->next = NULL;
 
+	(*cur_ll)->next = new_elem;
+	*cur_ll = new_elem;
+}
+
+void	isolate_command_or_argument(char **cmd_input, char tmp[1024])
+{
+	size_t	i;
+
+	i = 0;
+	while (**cmd_input != ';' && **cmd_input != '&' && **cmd_input != '|'
+	&& is_not_sep(**cmd_input)
+	&& **cmd_input != '\0') 
+	{
+		tmp[i] = **cmd_input;
+		++i;
+		++(*cmd_input);
+	}
+	tmp[i] = '\0';
+}
+
+struct s_msh_cmd	*complete_input_command(char **cmd_input, char **keep, struct s_msh_cmd *ll_cmd)
+{				printf("%s", SUITECMD); fflush(stdout); // efas
+
+	char 	*suite_cmd;
+	char	*tmp;
+
+	suite_cmd = read_user_input();
+	tmp = *cmd_input;
+	*cmd_input = malloc( ft_strlen(tmp) + ft_strlen(suite_cmd) + 1 ); // dhfeow
+	(*cmd_input)[0] = 0;
+
+	ft_strcat(*cmd_input, suite_cmd);
+	free(suite_cmd);
+	free(*keep);
+	*keep = *cmd_input;
+	if ((*cmd_input)[ft_strlen(*cmd_input) - 1] == '\n')
+		(*cmd_input)[ft_strlen(*cmd_input) - 1] = '\0';
+	if ( input_is_valid(*cmd_input) == false )
+	{
+		func_destroy_list(ll_cmd);
+		free(*keep);
+		return (PARSE_ERROR);
+	}
+	special_case_management(*cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
+	while (**cmd_input != 0)
+	{
+		while (**cmd_input == 0x20 || **cmd_input == 0x09 || **cmd_input == 0x0a)
+			++(*cmd_input);
+		if (**cmd_input == 0)
+			break ;
+		if (**cmd_input == ';')
+			++(*cmd_input);
+		if ( is_not_sep(**cmd_input) )
+			break ;
+	}
+	return (NULL);
+}
+
+void	manage_semicolon_connection(char **cmd_input, bool *need_new_node, enum e_msh_connection *connec)
+{													printf("IF SEMICOLON\n"); // rwef
+	*connec = MSH_CON_SEMICOLON;
+	*need_new_node = true;
+	while ( is_sep(**cmd_input) || **cmd_input == ';' )
+	{
+		if (**cmd_input == '\0')
+			break ;
+		++(*cmd_input);
+	}
+}
+
+struct s_msh_cmd 	*manage_and_connection(struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input, struct s_msh_cmd *ll_cmd)
+{						printf("IF AND\n"); // ear
+	variables->connec = MSH_CON_AND;
+	variables->need_new_node = true;
+	(*cmd_input) += 2;
+	while ( is_sep(**cmd_input) )
+	{
+		if (**cmd_input == '\0')
+		{
+			if ( complete_input_command(cmd_input, &(variables->keep), ll_cmd) == PARSE_ERROR )
+				return (PARSE_ERROR);
+			break ;
+		}
+		++(*cmd_input);
+	}
+	return (NULL);
+}
+
+struct s_msh_cmd 	*manage_or_connection(struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input, struct s_msh_cmd *ll_cmd)
+{					printf("IF OR\n"); // fssds
+	variables->connec = MSH_CON_OR;
+	variables->need_new_node = true;
+	(*cmd_input) += 2;
+	while ( is_sep(**cmd_input) )
+	{
+		if (**cmd_input == '\0')
+		{
+			if ( complete_input_command(cmd_input, &(variables->keep), ll_cmd) == PARSE_ERROR )
+				return (PARSE_ERROR);
+			break ;
+		}
+		++(*cmd_input);
+	}
+	return (NULL);
+}
+
+void	manage_separators(struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input)
+{			printf("IF SEP\n"); // sdvsdv
+	variables->need_new_node = false;
+	while ( is_sep(**cmd_input) )
+	{
+		if (**cmd_input == '\0')
+			break ;
+		++(*cmd_input);
+	}
+}
+
+struct s_msh_cmd	*skip_sep_and_semicolon(char **cmd_input, struct s_msh_cmd *ll_cmd)
+{
+	while ( is_sep(**cmd_input) ) 
+		++(*cmd_input);
+	if ( skip_semicolon(cmd_input, ll_cmd) == CMD_EMPTY )
+		return (CMD_EMPTY);
+	return (NULL);
+}
+
+struct s_msh_cmd	*init_variables_and_check_some_things_on_the_input(struct s_get_cmd_list_var_norme_lol *variables, char *cmd_input)
+{
+	variables->need_new_node = false;
+	variables->keep = cmd_input;
 	if (cmd_input[0] == '\0' || check_if_input_is_full_blank(cmd_input) == true )
 		return (CMD_EMPTY);
 	if ( input_is_valid(cmd_input) == false )
 		return (PARSE_ERROR);
-	arrangement_de_cas_special(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
+	special_case_management(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
+	return (NULL);
+}
+
+struct s_msh_cmd	*manage_connections(char **cmd_input, struct s_get_cmd_list_var_norme_lol *variables, struct s_msh_cmd *ll_cmd)
+{
+	if (**cmd_input == '&')
+	{
+		if ( manage_and_connection(variables, cmd_input, ll_cmd) == PARSE_ERROR )
+			return (PARSE_ERROR);
+	}
+
+	else if (**cmd_input == '|')
+	{
+		if ( manage_or_connection(variables, cmd_input, ll_cmd) == PARSE_ERROR )
+			return (PARSE_ERROR);
+	}
+
+	else if ( is_sep(**cmd_input) )
+		manage_separators(variables, cmd_input);
+
+	else
+		printf("\t\t\t\tIF VIDE MDRRRRRR\n"); // fddf
+	return (NULL);
+}
+
+struct s_msh_cmd	*get_cmd_list(char *cmd_input)
+{
+	struct s_msh_cmd						*ll_cmd;
+	struct s_msh_cmd						*cur_ll;
+	struct s_msh_cmd						*check_func_ret;
+	char									tmp[1024];
+	struct s_get_cmd_list_var_norme_lol		variables;
+
+	if ( (check_func_ret = init_variables_and_check_some_things_on_the_input(&variables, cmd_input)) != NULL )
+		return (check_func_ret);
 
 	// on sait ici que l'input nest pas vide, on cree donc un premier element pour la liste.
-	ll_cmd = init_first_node();
-	cur_ll = ll_cmd;
+	ll_cmd = init_first_node(&cur_ll);
 
-	while ( is_sep(*cmd_input) ) // passer les blancs genre "      xxxx"
-		++cmd_input;
-
-	if ( skip_semicolon(&cmd_input, ll_cmd) == CMD_EMPTY ) // passer les ; genre "; ; ; ; cmd" 
+	if ( skip_sep_and_semicolon(&cmd_input, ll_cmd) == CMD_EMPTY ) // passer les blancs genre "      xxxx"  // passer les ; genre "; ; ; ; cmd" 
 		return (CMD_EMPTY);
 
-	/*if (cmd_input[0] == ';') // passer les ; genre "; ; ; ; cmd" 
+	while (*cmd_input != '\0') // mega loop
 	{
-		++cmd_input;
-		while ( is_sep(*cmd_input) )
-		{
-			if (*cmd_input == 0)
-			{
-				free(ll_cmd);
-				return (CMD_EMPTY);
-			}
+		if (variables.need_new_node == true)
+			create_new_node(&cur_ll, variables.connec);
 
-			++cmd_input;
-			if (*cmd_input == ';')
-			{
-				++cmd_input;
-				if (*cmd_input == 0)
-				{
-					free(ll_cmd);
-					return (CMD_EMPTY);
-				}
-			}
-		}
-	}*/
+		variables.connec = MSH_CON_NONE;
 
-	while (*cmd_input != '\0')
-	{
-		if (new)
-		{
-																	printf("\t\tCREATION\n");
-			struct s_msh_cmd	*new_elem;
-			new_elem = malloc(sizeof(*new_elem)); // protect
-			new_elem->cmd = NULL;
-			new_elem->args_cmd = NULL;
-			new_elem->connection = connec;
-			new_elem->next = NULL;
+		isolate_command_or_argument(&cmd_input, tmp);       //printf("tmp = |%s|\n", tmp); // dsrce
 
-			cur_ll->next = new_elem;
-			cur_ll = new_elem;
-		}
-
-
-		connec = MSH_CON_NONE;
-		i = 0;
-		while (*cmd_input != ';' && *cmd_input != '&' && *cmd_input != '|'
-		&& is_not_sep(*cmd_input)
-		&& *cmd_input != '\0') 
-		{
-			tmp[i] = *cmd_input;
-			++i;
-			++cmd_input;
-		}
-		tmp[i] = '\0';
-
-													//printf("tmp = |%s|\n", tmp); // dsrce
 		if (cur_ll->cmd == NULL && tmp[0] != '\0') // si cest le premier mot de la cmd en fait
 			cur_ll->cmd = ft_strdup(tmp); // protect
 		else if (tmp[0] != '\0')
 			argument(cur_ll, tmp);
 		else if ( need_suite(cmd_input) == true )
 		{
-			//printf("NEED SUITE CMD\n"); // drse
-			printf("%s", SUITECMD); fflush(stdout); // efas
-			char *suite_cmd = read_user_input();
-			char *tmp = cmd_input; // dfdf
-			cmd_input = malloc( ft_strlen(tmp) + ft_strlen(suite_cmd) + 1 ); // dhfeow
-			cmd_input[0] = 0;
-
-			//ft_strcat(cmd_input, tmp);
-			ft_strcat(cmd_input, suite_cmd);
-			free(suite_cmd);
-			free(keep);
-			keep = cmd_input;
-			if (cmd_input[ft_strlen(cmd_input) - 1] == '\n')
-				cmd_input[ft_strlen(cmd_input) - 1] = '\0';
-			if ( input_is_valid(cmd_input) == false )
-			{
-				// free la liste
-				// enfin tout free quoi, le keep etc ?
-				func_destroy_list(ll_cmd);
-				free(keep);
+			if ( complete_input_command(&cmd_input, &(variables.keep), ll_cmd) == PARSE_ERROR )
 				return (PARSE_ERROR);
-			}
-			arrangement_de_cas_special(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
-			while (*cmd_input != 0)
-			{
-				while (*cmd_input == 0x20 || *cmd_input == 0x09 || *cmd_input == 0x0a)
-					++cmd_input;
-				if (*cmd_input == 0)
-					break ;
-				if (*cmd_input == ';')
-					++cmd_input;
-				if ( is_not_sep(*cmd_input) )
-					break ;
-			}
 		}
-		else
-			;//printf("RIEN\n");
 		
-
 		if (*cmd_input == '\0')
 			break ;
-		else if (*cmd_input == ';')
-		{																			printf("IF SEMICOLON\n");
-			connec = MSH_CON_SEMICOLON;
-			new = 1;
-			while ( is_sep(*cmd_input) || *cmd_input == ';' )
-			{
-				if (*cmd_input == '\0')
-					break ;
-				++cmd_input;
-			}
 
-		}
-		else if (*cmd_input == '&')
-		{																			printf("IF AND\n");
-			connec = MSH_CON_AND;
-			new = 1;
-			cmd_input += 2;
-			while ( is_sep(*cmd_input) )
-			{
-				if (*cmd_input == '\0')
-				{
-					//if ( need_suite(cmd_input) == true )
-				//	printf("NEED SUITE CMD 2\n"); // drse
-					printf("%s", SUITECMD); fflush(stdout); // efas
+		if ( (check_func_ret = manage_connections(&cmd_input, &variables, ll_cmd)) == PARSE_ERROR )
+			return (PARSE_ERROR);
 
-					char *suite_cmd = read_user_input();
-					char *tmp = cmd_input; // dfdf
-					cmd_input = malloc( ft_strlen(tmp) + ft_strlen(suite_cmd) + 1 ); // dhfeow
-					cmd_input[0] = 0;
-
-				//	ft_strcat(cmd_input, tmp);
-					ft_strcat(cmd_input, suite_cmd);
-					free(suite_cmd);
-					free(keep);
-					keep = cmd_input;
-					if (cmd_input[ft_strlen(cmd_input) - 1] == '\n')
-						cmd_input[ft_strlen(cmd_input) - 1] = '\0';
-					if ( input_is_valid(cmd_input) == false )
-					{
-						// free la liste
-						// enfin tout free quoi, le keep etc ?
-						func_destroy_list(ll_cmd);
-						free(keep);
-						return (PARSE_ERROR);
-					}
-					arrangement_de_cas_special(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
-					while (*cmd_input != 0)
-					{
-						while (*cmd_input == 0x20 || *cmd_input == 0x09 || *cmd_input == 0x0a)
-							++cmd_input;
-						if (*cmd_input == 0)
-							break ;
-						if (*cmd_input == ';')
-							++cmd_input;
-						if ( is_not_sep(*cmd_input) )
-							break ;
-					}
-					break ;
-				}
-				++cmd_input;
-			}
-
-		}
-		else if (*cmd_input == '|')
-		{																			printf("IF OR\n");
-			connec = MSH_CON_OR;
-			new = 1;
-			cmd_input += 2;
-			while ( is_sep(*cmd_input) )
-			{
-				if (*cmd_input == '\0')
-				{
-					printf("NEED SUITE CMD 2\n"); // drse
-					printf("%s", SUITECMD); fflush(stdout); // efas
-
-					char *suite_cmd = read_user_input();
-					char *tmp = cmd_input; // dfdf
-					cmd_input = malloc( ft_strlen(tmp) + ft_strlen(suite_cmd) + 1 ); // dhfeow
-					cmd_input[0] = 0;
-
-					//ft_strcat(cmd_input, tmp);
-					ft_strcat(cmd_input, suite_cmd);
-					free(suite_cmd);
-					free(keep);
-					keep = cmd_input;
-					if (cmd_input[ft_strlen(cmd_input) - 1] == '\n')
-						cmd_input[ft_strlen(cmd_input) - 1] = '\0';
-					if ( input_is_valid(cmd_input) == false )
-					{
-						// free la liste
-						// enfin tout free quoi, le keep etc ?
-						func_destroy_list(ll_cmd);
-						free(keep);
-						return (PARSE_ERROR);
-					}
-					arrangement_de_cas_special(cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
-					while (*cmd_input != 0)
-					{
-						while (*cmd_input == 0x20 || *cmd_input == 0x09 || *cmd_input == 0x0a)
-							++cmd_input;
-						if (*cmd_input == 0)
-							break ;
-						if (*cmd_input == ';')
-							++cmd_input;
-						if ( is_not_sep(*cmd_input) )
-							break ;
-					}
-					break ;
-				}
-				++cmd_input;
-			}
-		}
-		else if ( is_sep(*cmd_input) )
-		{																			printf("IF SEP\n");
-			new = 0;
-			while ( is_sep(*cmd_input) )
-			{
-				if (*cmd_input == '\0')
-					break ;
-				++cmd_input;
-			}
-		}
-		else
-		{
-																					printf("\t\t\t\tIF VIDE MDRRRRRR\n");
-		}
-
-
-		printf("\n=> |%s|\n", cmd_input);
-		//getchar(); // dsklfjr
+		printf("\n=> |%s|\n", cmd_input); // reft
 	}
 
-
-
-	free(keep);
+	free(variables.keep);
 	return (ll_cmd);
 }
 

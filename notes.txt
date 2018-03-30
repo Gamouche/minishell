@@ -33,9 +33,27 @@ ERREURS
 ls rien && ;ls || pwd // le parseur marche, mais pour les executions : le premier ls se lance et foire, le second ls n'est pas lance mais le pwd oui !
 --------
 
+
+----
+si la commande est * (etoile) ben il faut faie des trucs chiants
+----
+
 CAS CHELOU BONUS
 "&&"
 "||"
 ";"
 "CMD"
 'CMD'
+
+
+
+1 || ls\& && ls  =>  en fait ls\& ca echappe le & ca donne ls&  donc ca veut lancer le binaire ls&
+
+
+lol && lol ; lo󠁍l || lol
+
+lol && lol ; lo󠁍l || lol
+00000000: 206c 6f6c 2026 2620 6c6f 6c20 3b20 6c6f   lol && lol ; lo
+00000010: f3a0 818d 6c20 7c7c 206c 6f6c 0a         ....l || lol.
+00000000: 206c 6f6c 2026 2620 6c6f 6c20 3b20 6c6f   lol && lol ; lo
+00000010: 6c20 3b20 6c6f 6c20 7c7c 206c 6f6c 0a    l ; lol || lol.
