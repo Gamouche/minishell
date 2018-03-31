@@ -14,6 +14,7 @@
 
 # define MINISHELL_H
 
+# include <stdlib.h>
 # include "../libft/includes/libft.h"
 
 					#include <stdio.h> // debuggggggg
@@ -39,16 +40,17 @@ struct s_msh_cmd
 	struct s_msh_cmd		*next;
 };
 
+# include <stdbool.h> // cette structure va aller dans un autre .h 
 struct s_get_cmd_list_var_norme_lol
 {
 	char					*keep;
 	bool					need_new_node;
 	enum e_msh_connection	connec;
+	struct s_msh_cmd		*cur_ll;
 };
 
 struct 	s_msh_cmd	*get_cmd(void);
-char				*read_user_input(void);
-struct s_msh_cmd	*get_cmd_list(char *cmd_input);
+//struct s_msh_cmd	*get_cmd_list(char *cmd_input);
 void				func_destroy_list(struct s_msh_cmd *ll);
 
 
