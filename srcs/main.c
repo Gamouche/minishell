@@ -12,23 +12,9 @@
 
 #include <stdlib.h>
 #include "../includes/minishell.h"
+#include "../includes/get_cmd.h"
 
-void	func_destroy_list(struct s_msh_cmd *ll)
-{
-	struct s_msh_cmd *del;
-	while (ll != NULL)
-	{
-		del = ll;
-		ll = ll->next;
-		free(del->cmd);
-		if (del->args_cmd)
-			for (int i = 0 ; (del->args_cmd)[i] != NULL ; ++i)
-				free((del->args_cmd)[i]);
-		free(del->args_cmd);
-		free(del);
-	}
 
-}
 
 void	msh_prompt(void)
 {

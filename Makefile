@@ -39,7 +39,9 @@ OBJDIR :=					./build/
 SRCS_DIR :=					./srcs/
 
 #	Sources
-SRC +=						main.c get_cmdtmp.c read_user_input.c get_cmd.c
+SRC +=						main.c read_user_input.c get_cmd.c check_input.c \
+							is_sep_or_not.c manage_connections.c reinput.c manage_llist.c \
+							manage_argument.c 
 
 OBJECTS =					$(patsubst %.c,$(OBJDIR)%.o,$(SRCS))
 

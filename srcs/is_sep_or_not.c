@@ -1,43 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   is_sep_or_not.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/23 17:15:28 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/03/23 17:15:29 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/03/31 19:39:55 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/03/31 19:39:56 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
+#include "../includes/minishell.h"
+#include "../includes/get_cmd.h"
 
-# define MINISHELL_H
-
-# include <stdlib.h>
-# include "../libft/includes/libft.h"
-
-					#include <stdio.h> // debuggggggg
-
-# define FATAL_ERROR (2)
-
-
-enum e_msh_connection
+int is_sep(int c)
 {
-	MSH_CON_NONE,
-	MSH_CON_SEMICOLON,
-	MSH_CON_AND,
-	MSH_CON_OR
-};
-
-struct s_msh_cmd
+	return (ft_strchr(MSH_CMD_SEPARATORS, c) != NULL);
+}
+int is_not_sep(int c)
 {
-	char					*cmd;
-	char					**args_cmd;
-	enum e_msh_connection 	connection;
-	struct s_msh_cmd		*next;
-};
-
-
-
-#endif
+	return (ft_strchr(MSH_CMD_SEPARATORS, c) == NULL);
+}
