@@ -78,4 +78,9 @@ void				store_argument(struct s_msh_cmd *ll, const char *arg);
 void				isolate_command_or_argument(char **cmd_input,
 												char tmp[1024]);
 
+/*
+**	input_cmd_special_case_management.c
+*/
+void				special_case_management(char *input);
+
 #endif

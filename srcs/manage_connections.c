@@ -15,7 +15,7 @@
 
 static void			manage_semicolon_connection(char **cmd_input,
 			bool *need_new_node, enum e_msh_connection *connec)
-{													printf("IF SEMICOLON\n"); // rwef
+{												//	printf("IF SEMICOLON\n"); // rwef
 	*connec = MSH_CON_SEMICOLON;
 	*need_new_node = true;
 	while (is_sep(**cmd_input) || **cmd_input == ';')
@@ -29,7 +29,7 @@ static void			manage_semicolon_connection(char **cmd_input,
 struct s_msh_cmd	*manage_and_connection(
 	struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input,
 	struct s_msh_cmd *ll_cmd)
-{						printf("IF AND\n"); // ear
+{						//printf("IF AND\n"); // ear
 	variables->connec = MSH_CON_AND;
 	variables->need_new_node = true;
 	(*cmd_input) += 2;
@@ -50,7 +50,7 @@ struct s_msh_cmd	*manage_and_connection(
 struct s_msh_cmd	*manage_or_connection(
 	struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input,
 	struct s_msh_cmd *ll_cmd)
-{					printf("IF OR\n"); // fssds
+{					//printf("IF OR\n"); // fssds
 	variables->connec = MSH_CON_OR;
 	variables->need_new_node = true;
 	(*cmd_input) += 2;
@@ -70,7 +70,7 @@ struct s_msh_cmd	*manage_or_connection(
 
 void				manage_separators(
 	struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input)
-{			printf("IF SEP\n"); // sdvsdv
+{			//printf("IF SEP\n"); // sdvsdv
 	variables->need_new_node = false;
 	while (is_sep(**cmd_input))
 	{
