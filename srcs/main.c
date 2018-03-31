@@ -13,14 +13,7 @@
 #include <stdlib.h>
 #include "../includes/minishell.h"
 #include "../includes/get_cmd.h"
-
-
-
-void	msh_prompt(void)
-{
-	const char *prompt = "\e[1m\x1B[32mSERGE $> \x1B[0m";
-	ft_putstr(prompt);
-}
+#include "../includes/prompt.h"
 
 void	msh_loop(void)
 {

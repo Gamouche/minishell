@@ -42,13 +42,12 @@ void	special_case_management(char *input)
 
 bool	check_if_input_is_full_blank(const char *input)
 {
-	while ( is_sep(*input) )
+	while (is_sep(*input))
 	{
 		if (*input == 0)
 			return (true);
 		++input;
 	}
-
 	return (false);
 }
 

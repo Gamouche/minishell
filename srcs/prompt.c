@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_user_input.h                                  :+:      :+:    :+:   */
+/*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/31 16:37:29 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/03/31 16:37:31 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/03/31 21:33:18 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/03/31 21:33:19 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef READ_USER_INPUT_H
+#include "../includes/minishell.h"
 
-# define READ_USER_INPUT_H
+void	msh_prompt(void)
+{
+	const char *prompt = "\e[1m\x1B[32mSERGE $> \x1B[0m";
 
-# define SIZE_READ (1000)
+	ft_putstr(prompt);
+}
 
-char	*read_user_input(void);
+void	msh_prompt_complete_cmd(void)
+{
+	const char *prompt = "\e[1m\x1B[32mSERGE SUITE $> \x1B[0m";
 
-#endif
+	ft_putstr(prompt);
+}

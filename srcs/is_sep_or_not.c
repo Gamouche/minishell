@@ -13,11 +13,12 @@
 #include "../includes/minishell.h"
 #include "../includes/get_cmd.h"
 
-int is_sep(int c)
+int		is_sep(int c)
 {
 	return (ft_strchr(MSH_CMD_SEPARATORS, c) != NULL);
 }
-int is_not_sep(int c)
+
+int		is_not_sep(int c)
 {
 	return (ft_strchr(MSH_CMD_SEPARATORS, c) == NULL);
 }

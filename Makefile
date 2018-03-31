@@ -39,7 +39,7 @@ OBJDIR :=					./build/
 SRCS_DIR :=					./srcs/
 
 #	Sources
-SRC +=						main.c read_user_input.c get_cmd.c check_input.c \
+SRC +=						main.c prompt.c read_user_input.c get_cmd.c check_input.c \
 							is_sep_or_not.c manage_connections.c reinput.c manage_llist.c \
 							manage_argument.c 
 
