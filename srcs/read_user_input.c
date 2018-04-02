@@ -13,7 +13,6 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <unistd.h>
-#include "../includes/read_user_input.h"
 #include "../includes/minishell.h"
 
 static void			alloc_and_store(char **final_str, size_t old_size, size_t size, char tmp[])

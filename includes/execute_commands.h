@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   execute_commands.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/23 17:15:28 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/03/23 17:15:29 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/04/02 19:21:08 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/04/02 19:21:09 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
+#ifndef EXECUTE_COMMANDS_H
 
-# define MINISHELL_H
+# define EXECUTE_COMMANDS_H
 
-# include <stdlib.h>
-# include "../libft/includes/libft.h"
-# include "../includes/read_user_input.h"
-# include "../includes/prompt.h"
-# include "../includes/get_cmd.h"
-# include "../includes/execute_commands.h"
-# include "../includes/environ.h"
+# define NOT_BUILTIN (-1)
+# define NB_BUILTINS (6)
 
-					#include <stdio.h> // debuggggggg
-
-# define FATAL_ERROR (2)
-
-
-
-
+/*
+**	execute_commands.c
+*/
+int		execute_commands(struct s_msh_cmd *ll_cmd);
 
 #endif

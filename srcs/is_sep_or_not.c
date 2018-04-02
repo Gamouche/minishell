@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/get_cmd.h"
 
 int		is_sep(int c)
 {

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/prompt.h"
 
 static char	*cut_prompt_string(char *cwd)
 {
@@ -32,7 +31,22 @@ static char	*cut_prompt_string(char *cwd)
 	return (cut_cwd + index);
 }
 
-void		msh_prompt(void)
+static void	display_arrow(int last_ret_value)
+{
+	char	arrow[100];
+
+	arrow[0] = '\0';
+	ft_strcat(arrow, BOLD);
+	if (last_ret_value == 0)
+		ft_strcat(arrow, GREEN);
+	else
+		ft_strcat(arrow, RED);
+	ft_strcat(arrow, " $> ");
+	ft_strcat(arrow, EOC);
+	ft_putstr(arrow);
+}
+
+void		msh_prompt(int last_ret_value)
 {
 	char	*cut_cwd;
 	char	*cwd;
@@ -42,13 +56,13 @@ void		msh_prompt(void)
 	if (cwd == NULL)
 		ft_exit(FATAL_ERROR, "Error while displaying the minishell \'s prompt\n");
 	cut_cwd = cut_prompt_string(cwd);
-	prompt = ft_malloc(ft_strlen(cut_cwd) + ft_strlen(GREEN) + ft_strlen(BOLD) + ft_strlen(EOC) + 5, FATAL_ERROR);
+	prompt = ft_malloc(ft_strlen(cut_cwd) + ft_strlen(GREEN) + ft_strlen(BOLD) + ft_strlen(EOC) + 1, FATAL_ERROR);
 	ft_strcpy(prompt, BOLD);
 	ft_strcat(prompt, GREEN);
 	ft_strcat(prompt, cut_cwd);
-	ft_strcat(prompt, " $> ");
 	ft_strcat(prompt, EOC);
 	ft_putstr(prompt);
+	display_arrow(last_ret_value);
 	free(cwd);
 	free(prompt);
 }

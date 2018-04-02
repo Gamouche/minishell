@@ -41,7 +41,8 @@ SRCS_DIR :=					./srcs/
 #	Sources
 SRC +=						main.c prompt.c read_user_input.c get_cmd.c check_input.c \
 							is_sep_or_not.c manage_connections.c reinput.c manage_llist.c \
-							manage_argument.c input_cmd_special_case_management.c
+							manage_argument.c input_cmd_special_case_management.c execute_commands.c \
+							environ.c 
 
 OBJECTS =					$(patsubst %.c,$(OBJDIR)%.o,$(SRCS))
 

@@ -13,7 +13,7 @@ chdir ;
 stat
 lstat
 fstat
-fork ;
+fork ;  0 si on est dans le fils / PID du fils si on est dans le pere
 execve ;
 wait ;
 waitpid ;
@@ -47,11 +47,29 @@ CAS CHELOU BONUS
 
 1 || ls\& && ls  =>  en fait ls\& ca echappe le & ca donne ls&  donc ca veut lancer le binaire ls&
 
+------------
+WIFEXITED(status)
 
-lol && lol ; lo󠁍l || lol
+Elle renvoie vrai si le statut provient d'un processus fils qui s'est terminé en quittant le main avecreturnou avec un appel àexit.
 
-lol && lol ; lo󠁍l || lol
-00000000: 206c 6f6c 2026 2620 6c6f 6c20 3b20 6c6f   lol && lol ; lo
-00000010: f3a0 818d 6c20 7c7c 206c 6f6c 0a         ....l || lol.
-00000000: 206c 6f6c 2026 2620 6c6f 6c20 3b20 6c6f   lol && lol ; lo
-00000010: 6c20 3b20 6c6f 6c20 7c7c 206c 6f6c 0a    l ; lol || lol.
+WEXITSTATUS(status)
+
+Elle renvoie le code de retour du processus fils passé àexitou àreturn.
+
+Cette macro est utilisable uniquement si vous avez utiliséWIFEXITEDavant, et que cette dernière a renvoyé vrai.
+
+WIFSIGNALED(status)
+
+Elle renvoie vrai si le statut provient d'un processus fils qui s'est terminé à cause d'un signal.
+
+WTERMSIG(status)
+
+Elle renvoie la valeur du signal qui a provoqué la terminaison du processus fils.
+
+Cette macro est utilisable uniquement si vous avez utiliséWIFSIGNALEDavant, et que cette dernière a renvoyé vrai.
+
+EXEMPLE POUR RECUP LA VALEUR DE RETOUR
+wait(&status);
+if ( WIFEXITED(status) )
+	printf("status = %d\n", WEXITSTATUS(status) );
+-------------

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/get_cmd.h"
 
 static void			manage_semicolon_connection(char **cmd_input,
 			bool *need_new_node, enum e_msh_connection *connec)

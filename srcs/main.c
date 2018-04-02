@@ -17,20 +17,22 @@
 
 static void	msh_loop(void)
 {
-	struct s_msh_cmd *ll_cmd;
+	struct s_msh_cmd 	*ll_cmd;
+	int					last_ret_value;
 
+	last_ret_value = 0;
 	while (42)
 	{
-		msh_prompt();
+		msh_prompt(last_ret_value);
 
 		ll_cmd = get_cmd(); // lit la cmd et cree la liste chainee correspondante / renvoie un ptr sur le premier node la ll
 
 		if (ll_cmd == CMD_EMPTY || ll_cmd == PARSE_ERROR)
 			continue ;
 
-		// func_exec()   execute les cmd de la liste chainee
+		last_ret_value = execute_commands(ll_cmd);
 
-		func_destroy_list(ll_cmd); //   detruit correctement la liste chainee pour laisser place a une nouvelle
+		func_destroy_list(ll_cmd);
 
 
 

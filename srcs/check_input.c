@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/get_cmd.h"
+#include "../includes/minishell.h"
 
 bool		check_if_input_is_full_blank(const char *input)
 {

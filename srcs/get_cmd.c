@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/read_user_input.h"
-#include "../includes/get_cmd.h"
 
 void debug_print_list(struct s_msh_cmd *ptr)
 {

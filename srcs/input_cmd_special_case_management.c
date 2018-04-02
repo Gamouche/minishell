@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/get_cmd.h"
+#include "../includes/minishell.h"
 
 void	special_case_management(char *input)
 {

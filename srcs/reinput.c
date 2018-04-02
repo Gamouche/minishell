@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/get_cmd.h"
-#include "../includes/read_user_input.h"
-#include "../includes/prompt.h"
 
 static bool			need_reinput(char *input)
 {

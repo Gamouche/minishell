@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/get_cmd.h"
 
 static void	store_first_argument(struct s_msh_cmd *ll, const char *arg,
 															size_t *nb)

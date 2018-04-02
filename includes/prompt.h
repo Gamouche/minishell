@@ -15,10 +15,11 @@
 # define PROMPT_H
 
 # define GREEN  "\x1B[32m"
-# define BOLD "\e[1m"
+# define RED    "\x1B[31m"
+# define BOLD   "\e[1m"
 # define EOC	"\x1B[0m"
 
-void	msh_prompt(void);
+void	msh_prompt(int last_ret_value);
 void	msh_prompt_complete_cmd(void);
 
 #endif
