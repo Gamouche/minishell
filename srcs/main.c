@@ -15,7 +15,7 @@
 #include "../includes/get_cmd.h"
 #include "../includes/prompt.h"
 
-static void	msh_loop(void)
+static void	msh_loop(char *environ[])
 {
 	struct s_msh_cmd 	*ll_cmd;
 	int					last_ret_value;
@@ -30,7 +30,7 @@ static void	msh_loop(void)
 		if (ll_cmd == CMD_EMPTY || ll_cmd == PARSE_ERROR)
 			continue ;
 
-		last_ret_value = execute_commands(ll_cmd);
+		last_ret_value = execute_commands(ll_cmd, environ);
 
 		func_destroy_list(ll_cmd);
 
@@ -44,9 +44,12 @@ static void	msh_loop(void)
 
 }
 
-int		main(void)
+int		main(int argc, char *argv[], char *environ[])
 {
-	msh_loop();
+	(void)argc;
+	(void)argv;
+
+	msh_loop(environ);
 
 
 

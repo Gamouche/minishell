@@ -47,28 +47,33 @@ static int	execute_one_command(struct s_msh_cmd *cur_node, char **env)
 {
 	int		ret_value; // la valeur retournee par la commande lancee (le status de wait() quoi)
 	int		builtin_index;
+	char	*cmd_path;
 
 
 	// si la cmd courrante est un builtin, alors on l'execute
-		if ( (builtin_index = is_cmd_builtin(cur_node->cmd)) != NOT_BUILTIN ) printf("index %d\n", builtin_index);
+		if ( (builtin_index = is_cmd_builtin(cur_node->cmd)) != NOT_BUILTIN ) {}
 		// l'index est celui d'un tableau de ptr sur func gere dans execute_builtin()
-		//	execute_builtin(builtin_index, env)
+		//	ret_value = execute_builtin(builtin_index, env)
 
 		// sinon si cest pas un builtin, on cherche l'access dans PATH et on verifie que cest bien executable
+		//	cmd_path = search_cmd_path(env); // renvoie NULL si aucun PATH nest trouve, ou si le binaire trouve nest en fait pas executable
 			// si cest bon on execute
+		//	ret_value = execute_program(cur_node, cmd_path, env);
 			// sinon command not found je suppose (d'autres cas a gerer ?)
 
 			ret_value = 0; // pour les warnings
 		return (ret_value);
 }
 
-int			execute_commands(struct s_msh_cmd *ll_cmd)
+int			execute_commands(struct s_msh_cmd *ll_cmd, char *environ[])
 {
-	int		last_ret_value;
-	char	**my_env;
+	int			last_ret_value;
+	static char	**my_env;
+	static bool	env_already_set = false;
 
 	last_ret_value = 0;
-	my_env = init_my_env();
+	if (env_already_set == false && (env_already_set = true))
+		my_env = init_my_env(environ);
 
 	while (ll_cmd != NULL)
 	{

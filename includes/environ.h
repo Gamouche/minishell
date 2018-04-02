@@ -14,7 +14,11 @@
 
 # define ENVIRON_H
 
-char	**init_my_env(void);
-
+/*
+**	environ.c
+*/
+char	**init_my_env(char *environ[]);
+size_t	get_nb_env_var(char *environ[]);
+void	copy_environ(char **my_env, char *environ[]);
 
 #endif

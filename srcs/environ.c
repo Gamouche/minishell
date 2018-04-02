@@ -12,9 +12,7 @@
 
 #include "../includes/minishell.h"
 
-extern char	**environ;
-
-static size_t	get_nb_env_var(void)
+size_t	get_nb_env_var(char *environ[])
 {
 	size_t	i;
 
@@ -24,13 +22,28 @@ static size_t	get_nb_env_var(void)
 	return (i);
 }
 
-char			**init_my_env(void)
+void		copy_environ(char **my_env, char *environ[])
 {
-	char	**my_env;
-	size_t	nb_env_var;
+	size_t	i;
 
-	nb_env_var = get_nb_env_var();
+	i = 0;
+	while (environ[i] != NULL)
+	{
+		if ((my_env[i] = ft_strdup(environ[i])) == NULL)
+			ft_exit(FATAL_ERROR, "Call to malloc() failed\n");
+		++i;
+	}
+}
+
+char			**init_my_env(char *environ[])
+{									printf("ENV ENV ENV ENV\n");
+	char		**my_env;
+	size_t		nb_env_var;
+
+	nb_env_var = get_nb_env_var(environ);
 	my_env = ft_malloc(sizeof(char *) * (nb_env_var + 1), FATAL_ERROR);
+	my_env[nb_env_var] = NULL;
+	copy_environ(my_env, environ);
 
 	return (my_env);
 }
