@@ -26,7 +26,7 @@ static void			manage_semicolon_connection(char **cmd_input,
 	}
 }
 
-struct s_msh_cmd	*manage_and_connection(
+static struct s_msh_cmd	*manage_and_connection(
 	struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input,
 	struct s_msh_cmd *ll_cmd)
 {						//printf("IF AND\n"); // ear
@@ -47,7 +47,7 @@ struct s_msh_cmd	*manage_and_connection(
 	return (NULL);
 }
 
-struct s_msh_cmd	*manage_or_connection(
+static struct s_msh_cmd	*manage_or_connection(
 	struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input,
 	struct s_msh_cmd *ll_cmd)
 {					//printf("IF OR\n"); // fssds
@@ -68,7 +68,7 @@ struct s_msh_cmd	*manage_or_connection(
 	return (NULL);
 }
 
-void				manage_separators(
+static void				manage_separators(
 	struct s_get_cmd_list_var_norme_lol *variables, char **cmd_input)
 {			//printf("IF SEP\n"); // sdvsdv
 	variables->need_new_node = false;

@@ -15,7 +15,7 @@
 #include "../includes/get_cmd.h"
 #include "../includes/prompt.h"
 
-void	msh_loop(void)
+static void	msh_loop(void)
 {
 	struct s_msh_cmd *ll_cmd;
 

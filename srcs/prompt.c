@@ -11,17 +11,51 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "../includes/prompt.h"
 
-void	msh_prompt(void)
+static char	*cut_prompt_string(char *cwd)
 {
-	const char *prompt = "\e[1m\x1B[32mSERGE $> \x1B[0m";
+	char	*cut_cwd;
+	size_t	index;
 
-	ft_putstr(prompt);
+	cut_cwd = cwd;
+	index = ft_strlen(cwd) - 1;
+	while (cut_cwd + index != cwd)
+	{
+		if (cut_cwd[index] == '/')
+		{
+			++index;
+			break ;
+		}
+		--index;
+	}
+	return (cut_cwd + index);
 }
 
-void	msh_prompt_complete_cmd(void)
+void		msh_prompt(void)
 {
-	const char *prompt = "\e[1m\x1B[32mSERGE SUITE $> \x1B[0m";
+	char	*cut_cwd;
+	char	*cwd;
+	char	*prompt;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+		ft_exit(FATAL_ERROR, "Error while displaying the minishell \'s prompt\n");
+	cut_cwd = cut_prompt_string(cwd);
+	prompt = ft_malloc(ft_strlen(cut_cwd) + ft_strlen(GREEN) + ft_strlen(BOLD) + ft_strlen(EOC) + 5, FATAL_ERROR);
+	ft_strcpy(prompt, BOLD);
+	ft_strcat(prompt, GREEN);
+	ft_strcat(prompt, cut_cwd);
+	ft_strcat(prompt, " $> ");
+	ft_strcat(prompt, EOC);
+	ft_putstr(prompt);
+	free(cwd);
+	free(prompt);
+}
+
+void		msh_prompt_complete_cmd(void)
+{
+	const char *prompt = GREEN"cmd > "EOC;
 
 	ft_putstr(prompt);
 }
