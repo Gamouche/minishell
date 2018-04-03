@@ -48,7 +48,7 @@ static void	display_error_msg(const char *cmd_path, const char *cmd)
 	if (cmd_path == CMD_NOT_FOUND)
 		ft_putstr_fd("minishell: command not found: ", STDERR_FILENO);
 	else if (cmd_path == CMD_NOPERM)
-		ft_putstr_fd("minishell:permission denied: ", STDERR_FILENO);
+		ft_putstr_fd("minishell: permission denied: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putchar('\n');
 }
@@ -58,8 +58,9 @@ static int	execute_one_command(struct s_msh_cmd *cur_node, char **env)
 	int		ret_value; // la valeur retournee par la commande lancee (le status de wait() quoi)
 	int		builtin_index;
 	char	*cmd_path;
-													printf("\t\t\t\tEXECUTE %s\n", cur_node->cmd);
+												//	printf("\t\t\t\tEXECUTE %s\n", cur_node->cmd);
 
+	ret_value = 1;
 	cmd_path = NULL;
 
 // si la cmd courrante est un builtin, alors on l'execute
@@ -71,9 +72,8 @@ static int	execute_one_command(struct s_msh_cmd *cur_node, char **env)
 	cmd_path = search_cmd_path(cur_node->cmd, env); // renvoie NULL si aucun PATH nest trouve, ou si le binaire trouve nest en fait pas executable
 	if (cmd_path == CMD_NOT_FOUND || cmd_path == CMD_NOPERM)
 		display_error_msg(cmd_path, cur_node->cmd);
-		// si cest bon on execute
-	//	ret_value = execute_program(cur_node, cmd_path, env);
-		// sinon command not found je suppose (d'autres cas a gerer ?)
+	else
+		ret_value = execute_program(cur_node, cmd_path, env);
 
 	if (cmd_path != CMD_NOT_FOUND && cmd_path != CMD_NOPERM)
 		free(cmd_path);
@@ -100,6 +100,7 @@ int			execute_commands(struct s_msh_cmd *ll_cmd, char **env)
 		del = ll_cmd;
 		ll_cmd = ll_cmd->next;
 
+		// faire une fonction pour ca ...
 		free(del->cmd);
 		if (del->args_cmd != NULL)
 		{

@@ -1,35 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   execute_program.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/23 17:15:28 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/03/23 17:15:29 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/04/03 20:21:24 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/04/03 20:21:25 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
+#ifndef EXECUTE_PROGRAM_H
 
-# define MINISHELL_H
-
-# include <stdlib.h>
-
-# include "../libft/includes/libft.h"
-# include "read_user_input.h"
-# include "prompt.h"
-# include "get_cmd.h"
-# include "execute_commands.h"
-# include "environ.h"
-# include "search_cmd_path.h"
-# include "execute_program.h"
-
-					#include <stdio.h> // debuggggggg
-
-# define FATAL_ERROR (2)
+# define EXECUTE_PROGRAM_H
 
 
+/*
+**	execute_program.c
+*/
+int		execute_program(struct s_msh_cmd *cur_node, const char *cmd_path, char **env);
 
 
 

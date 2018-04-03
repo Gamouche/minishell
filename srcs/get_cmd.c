@@ -13,7 +13,7 @@
 #include "../includes/minishell.h"
 
 void debug_print_list(struct s_msh_cmd *ptr)
-{
+{							return;return;return;return;return;return;return;return;return;return;
 	if (ptr == 00)         ///// commentaire inutile pour ne pas oublier cette fonction anti norme
 	{
 		printf("\n----------\tPAS DE LISTE\n");
@@ -146,8 +146,7 @@ struct s_msh_cmd	*get_cmd(void)
 	if (cmd_input[ft_strlen(cmd_input) - 1] == '\n')
 		cmd_input[ft_strlen(cmd_input) - 1] = '\0';		
 
-					if (ft_strcmp(cmd_input, "clear") == 0) system("clear");
-					else if (ft_strcmp(cmd_input, "qq") == 0) {free(cmd_input);exit(42);} // jkjhouew
+					if (ft_strcmp(cmd_input, "qq") == 0) {free(cmd_input);exit(42);} // jkjhouew
 	
 	ll_cmd = get_cmd_list(cmd_input, NULL, NULL, array_for_get_cmd_list_func);
 	if (ll_cmd == PARSE_ERROR)
