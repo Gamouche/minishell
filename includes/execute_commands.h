@@ -20,6 +20,6 @@
 /*
 **	execute_commands.c
 */
-int		execute_commands(struct s_msh_cmd *ll_cmd, char *environ[]);
+int		execute_commands(struct s_msh_cmd *ll_cmd, char **environ);
 
 #endif

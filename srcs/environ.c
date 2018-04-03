@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-size_t	get_nb_env_var(char *environ[])
+size_t	get_nb_env_var(char **environ)
 {
 	size_t	i;
 
@@ -22,7 +22,7 @@ size_t	get_nb_env_var(char *environ[])
 	return (i);
 }
 
-void		copy_environ(char **my_env, char *environ[])
+void		copy_environ(char **my_env, char **environ)
 {
 	size_t	i;
 
@@ -35,8 +35,8 @@ void		copy_environ(char **my_env, char *environ[])
 	}
 }
 
-char			**init_my_env(char *environ[])
-{									printf("ENV ENV ENV ENV\n");
+char			**init_my_env(char **environ)
+{
 	char		**my_env;
 	size_t		nb_env_var;
 

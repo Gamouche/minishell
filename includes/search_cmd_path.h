@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   search_cmd_path.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/23 17:15:28 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/03/23 17:15:29 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/04/03 18:10:53 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/04/03 18:10:59 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
+#ifndef SEARCH_CMD_PATH_H
 
-# define MINISHELL_H
+# define SEARCH_CMD_PATH_H
 
-# include <stdlib.h>
-
-# include "../libft/includes/libft.h"
-# include "read_user_input.h"
-# include "prompt.h"
-# include "get_cmd.h"
-# include "execute_commands.h"
-# include "environ.h"
-# include "search_cmd_path.h"
-
-					#include <stdio.h> // debuggggggg
-
-# define FATAL_ERROR (2)
+# define CMD_NOPERM ((char *)-1)
+# define CMD_NOT_FOUND ((char *)-2)
 
 
-
-
+/*
+**	search_cmd_path.c
+*/
+char	*search_cmd_path(const char *cmd, char **env);
 
 #endif
