@@ -87,6 +87,7 @@ int			execute_program(struct s_msh_cmd *cur_node, const char *cmd_path, char **e
 		ft_putstr_fd("minishell: exec format error: ", STDERR_FILENO);
 		ft_putstr_fd(cur_node->cmd, STDERR_FILENO);
 		ft_putchar('\n');
+		exit(0);
 	}
 	else
 	{

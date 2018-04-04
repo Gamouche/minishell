@@ -36,7 +36,7 @@ WEXITSTATUS(status)
 
 Elle renvoie le code de retour du processus fils passé àexitou àreturn.
 
-Cette macro est utilisable uniquement si vous avez utiliséWIFEXITEDavant, et que cette dernière a renvoyé vrai.
+Cette macro est utilisable uniquement si vous avez utilisé WIFEXITED avant, et que cette dernière a renvoyé vrai.
 
 WIFSIGNALED(status)
 

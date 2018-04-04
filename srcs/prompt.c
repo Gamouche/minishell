@@ -54,7 +54,7 @@ void		msh_prompt(int last_ret_value)
 
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
-		ft_exit(FATAL_ERROR, "Error while displaying the minishell \'s prompt\n");
+		ft_exit(FATAL_ERROR, "Error while displaying the minishell\'s prompt\n");
 	cut_cwd = cut_prompt_string(cwd);
 	prompt = ft_malloc(ft_strlen(cut_cwd) + ft_strlen(GREEN) + ft_strlen(BOLD) + ft_strlen(EOC) + 1, FATAL_ERROR);
 	ft_strcpy(prompt, BOLD);

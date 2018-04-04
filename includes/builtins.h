@@ -14,6 +14,9 @@
 
 # define BUILTINS_H
 
+# define BUILTIN_SUCCESS (0)
+# define BUILTIN_ERROR (1)
+
 /*
 **	builtins.c
 */

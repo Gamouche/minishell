@@ -144,9 +144,9 @@ struct s_msh_cmd	*get_cmd(void)
 	cmd_input = read_user_input();
 
 	if (cmd_input[ft_strlen(cmd_input) - 1] == '\n')
-		cmd_input[ft_strlen(cmd_input) - 1] = '\0';		
+		cmd_input[ft_strlen(cmd_input) - 1] = '\0';
 
-					if (ft_strcmp(cmd_input, "qq") == 0) {free(cmd_input);exit(42);} // jkjhouew
+					if (ft_strcmp(cmd_input, "qq") == 0) {/*puts("a plus dans l\'bus");*/free(cmd_input);exit(42);} // jkjhouew
 	
 	ll_cmd = get_cmd_list(cmd_input, NULL, NULL, array_for_get_cmd_list_func);
 	if (ll_cmd == PARSE_ERROR)
