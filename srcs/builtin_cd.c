@@ -44,27 +44,32 @@ static bool		home_is_valid(char **env)
 	return (false);
 }
 
-// cette fonction se rend au chemin du premier param. Si le premier param est NULL, alors la fonction va dans le chemin de HOME.
+
+
 int		go_to_dir(const char *path, char **env)
 {
 	int		ret_value;
+	int		ret_chdir;
+	size_t	i;
 
+	ret_value = BUILTIN_SUCCESS;
 	if (path != NULL)
-	{
-		if (chdir(path) != 0)
-		{
-			write(STDERR_FILENO, "cd: No such file or directory: ", 31);
-			write(STDERR_FILENO, path, ft_strlen(path));
-			write(STDERR_FILENO, "\n", 1);
-			return (BUILTIN_ERROR);
-		}
-
-	}
+		ret_chdir = chdir(path);
 	else
 	{
-		//ret_value = go_to_home(env);
+		i = 0;
+		while (ft_strncmp(env[i], "HOME", 4) != 0)
+			++i;
+		ret_chdir = chdir(env[i] + 5);
 	}
-	return (BUILTIN_SUCCESS);
+	if (ret_chdir != 0)
+	{
+		write(STDERR_FILENO, "cd: No such file or directory: ", 31);
+		write(STDERR_FILENO, path, ft_strlen(path));
+		write(STDERR_FILENO, "\n", 1);
+		ret_value = BUILTIN_ERROR;
+	}
+	return (ret_value);
 }
 
 int				builtin_cd(char **args, char **env)
