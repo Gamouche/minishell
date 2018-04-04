@@ -11,37 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-// ------------- a mettre dans un autre .c
-static void	init_builtins_array(char *builtins_array[NB_BUILTINS])
-{
-	builtins_array[0] = "echo";
-	builtins_array[1] = "cd";
-	builtins_array[2] = "setenv";
-	builtins_array[3] = "unsetenv";
-	builtins_array[4] = "env";
-	builtins_array[5] = "exit";
-}
-
-int			is_cmd_builtin(const char *cmd)
-{
-	char	*builtins_array[NB_BUILTINS];
-	int		builtin_index;
-
-	init_builtins_array(builtins_array);
-
-	builtin_index = 0;
-	while (builtin_index < NB_BUILTINS)
-	{
-		if (ft_strcmp(cmd, builtins_array[builtin_index]) == 0)
-			return (builtin_index);
-		++builtin_index;
-	}
-
-	return (NOT_BUILTIN);
-}
-
-
-// -------------
 
 static void	display_error_msg(const char *cmd_path, const char *cmd)
 {
@@ -64,9 +33,11 @@ static int	execute_one_command(struct s_msh_cmd *cur_node, char **env)
 	cmd_path = NULL;
 
 // si la cmd courrante est un builtin, alors on l'execute
-	if ( (builtin_index = is_cmd_builtin(cur_node->cmd)) != NOT_BUILTIN ) {}  // exit doit free l'env aussi
-	// l'index est celui d'un tableau de ptr sur func gere dans execute_builtin()
-	//	ret_value = execute_builtin(builtin_index, env)
+	if ( (builtin_index = is_cmd_builtin(cur_node->cmd)) != NOT_BUILTIN )  // exit doit free l'env aussi
+	{
+		ret_value = execute_builtin(cur_node->args_cmd, builtin_index, env);
+		return (ret_value);
+	}
 
 	// sinon si cest pas un builtin, on cherche l'access dans PATH et on verifie que cest bien executable
 	cmd_path = search_cmd_path(cur_node->cmd, env); // renvoie NULL si aucun PATH nest trouve, ou si le binaire trouve nest en fait pas executable

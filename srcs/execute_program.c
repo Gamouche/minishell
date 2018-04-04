@@ -49,6 +49,13 @@ static char	*get_full_path(const char *cmd_path, const char *cmd)
 {
 	char	*full_path;
 
+	if (ft_strcmp(cmd_path, cmd) == 0)
+	{
+		if ((full_path = ft_strdup(cmd)) == NULL)
+			ft_exit(FATAL_ERROR, "Call to malloc() failed\n");
+		return (full_path);
+	}
+
 	full_path = ft_malloc(ft_strlen(cmd_path) + ft_strlen(cmd) + 2, FATAL_ERROR);
 	ft_strcpy(full_path, cmd_path);
 	ft_strcat(full_path, "/");
@@ -75,6 +82,7 @@ int			execute_program(struct s_msh_cmd *cur_node, const char *cmd_path, char **e
 		ft_exit(FATAL_ERROR, "Call to fork() failed\n");
 	if (fork_ret == 0)
 	{
+							//	printf("execve = |%s|\n", full_path);
 		execve(full_path, real_args, env);
 		ft_putstr_fd("minishell: exec format error: ", STDERR_FILENO);
 		ft_putstr_fd(cur_node->cmd, STDERR_FILENO);

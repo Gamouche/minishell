@@ -24,6 +24,7 @@
 # include "environ.h"
 # include "search_cmd_path.h"
 # include "execute_program.h"
+# include "builtins.h"
 
 					#include <stdio.h> // debuggggggg
 

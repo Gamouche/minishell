@@ -62,8 +62,12 @@ static bool	is_good_path(const char *path, const char *cmd)
 	while ((dirent = readdir(dir)) != NULL)
 	{
 		if (ft_strcmp(dirent->d_name, cmd) == 0)
+		{
+			closedir(dir);
 			return (true);
+		}
 	}
+	closedir(dir);
 	return (false);
 }
 
@@ -106,8 +110,8 @@ char		*search_cmd_path(const char *cmd, char **env)
 	ft_memmove(&(cut_paths[0][0]), &(cut_paths[0][5]),  ft_strlen(cut_paths[0]) - 4);
 	
 	cmd_path = test_paths(cut_paths, cmd); // cherche le binaire dans les paths, et si il toruve il egarde quon a bien les droits exec
-	//if (cmd_path == CMD_NOT_FOUND)
-	//	cmd_path = test_savage_cmd(cmd); // par exemple "../exec.out" je vais aller opendir le bon dossier et chercher exec.out et tester ses droits
+	if (cmd_path == CMD_NOT_FOUND)
+		cmd_path = test_savage_cmd(cmd); // par exemple "../exec.out" je vais aller opendir le bon dossier et chercher exec.out et tester ses droits
 	// test_savage_cmd() renvoie CMD_NOT_FOUND ou CMD_NOPERM ou un pointeur valide
 
 	i = 0;

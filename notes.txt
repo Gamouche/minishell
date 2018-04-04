@@ -27,26 +27,6 @@ exit
 echo, cd, setenv, unsetenv, env, exit
 
 
---------
-ls rien && ;ls || pwd // le parseur marche, mais pour les executions : le premier ls se lance et foire, le second ls n'est pas lance mais le pwd oui !
---------
-
-
-----
-si la commande est * (etoile) ben il faut faie des trucs chiants
-----
-
-CAS CHELOU BONUS
-"&&"
-"||"
-";"
-"CMD"
-'CMD'
-
-
-
-1 || ls\& && ls  =>  en fait ls\& ca echappe le & ca donne ls&  donc ca veut lancer le binaire ls&
-
 ------------
 WIFEXITED(status)
 

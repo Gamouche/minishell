@@ -1,31 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   search_cmd_path.h                                  :+:      :+:    :+:   */
+/*   builtin_setenv.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/03 18:10:53 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/04/03 18:10:59 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/04/04 18:17:23 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/04/04 18:17:47 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SEARCH_CMD_PATH_H
+#include "../includes/minishell.h"
 
-# define SEARCH_CMD_PATH_H
+int		builtin_setenv(char **args, char **env)
+{		(void)args;(void)env;return 0;
 
-# define CMD_NOPERM ((char *)-1)
-# define CMD_NOT_FOUND ((char *)-2)
-
-
-/*
-**	search_cmd_path.c
-*/
-char	*search_cmd_path(const char *cmd, char **env);
-
-/*
-**	savage_cmd.c
-*/
-char	*test_savage_cmd(const char *cmd);
-
-#endif
+}

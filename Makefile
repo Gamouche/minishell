@@ -42,7 +42,9 @@ SRCS_DIR :=					./srcs/
 SRC +=						main.c prompt.c read_user_input.c get_cmd.c check_input.c \
 							is_sep_or_not.c manage_connections.c reinput.c manage_llist.c \
 							manage_argument.c input_cmd_special_case_management.c execute_commands.c \
-							environ.c search_cmd_path.c execute_program.c 
+							environ.c search_cmd_path.c execute_program.c savage_cmd.c builtins.c  \
+							builtin_echo.c builtin_cd.c builtin_setenv.c builtin_unsetenv.c builtin_env.c \
+							builtin_exit.c  
 
 OBJECTS =					$(patsubst %.c,$(OBJDIR)%.o,$(SRCS))
 
