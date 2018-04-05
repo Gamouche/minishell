@@ -19,7 +19,6 @@ static void	init_builtins_name_array(char *builtins_array[NB_BUILTINS])
 	builtins_array[2] = "setenv";
 	builtins_array[3] = "unsetenv";
 	builtins_array[4] = "env";
-	builtins_array[5] = "exit";
 }
 
 int			is_cmd_builtin(const char *cmd)
@@ -29,8 +28,10 @@ int			is_cmd_builtin(const char *cmd)
 
 	init_builtins_name_array(builtins_name_array);
 	builtin_index = 0;
-	while (builtin_index < NB_BUILTINS)
+	while (builtin_index < NB_BUILTINS - 1)
 	{
+		if (ft_strcmp(cmd, "exit") == 0)
+			return (BUILTIN_EXIT);
 		if (ft_strcmp(cmd, builtins_name_array[builtin_index]) == 0)
 			return (builtin_index);
 		++builtin_index;
@@ -38,23 +39,25 @@ int			is_cmd_builtin(const char *cmd)
 	return (NOT_BUILTIN);
 }
 
-static void	init_builtins_array(int (*builtins_array[])(char **, char **))
+static void	init_builtins_array(int (*builtins_array[])(char **, char ***))
 {
 	builtins_array[0] = &builtin_echo;
 	builtins_array[1] = &builtin_cd;
 	builtins_array[2] = &builtin_setenv;
 	builtins_array[3] = &builtin_unsetenv;
 	builtins_array[4] = &builtin_env;
-	builtins_array[5] = &builtin_exit;
 }
 
-int			execute_builtin(char **args, int index, char **env)
+int			execute_builtin(struct s_msh_cmd *cur_node, int index, char ***env)
 {
 	int	ret_value;
-	int (*builtins_array[NB_BUILTINS])(char **args, char **env);
+	int (*builtins_array[NB_BUILTINS - 1])(char **args, char ***env);
 
 	init_builtins_array(builtins_array);
-	ret_value = (*builtins_array[index])(args, env);
+	if (index == BUILTIN_EXIT) // si c'est exit, qui est toujours la derniere fonction du tableau
+		ret_value = builtin_exit(cur_node, *env);
+	else
+		ret_value = (*builtins_array[index])(cur_node->args_cmd, env);
 	return (ret_value);
 }
 

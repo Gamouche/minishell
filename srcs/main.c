@@ -30,7 +30,7 @@ static void	msh_loop(char **env)
 		if (ll_cmd == CMD_EMPTY || ll_cmd == PARSE_ERROR)
 			continue ;
 
-		last_ret_value = execute_commands(ll_cmd, env);
+		last_ret_value = execute_commands(ll_cmd, &env);
 
 
 

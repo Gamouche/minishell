@@ -10,9 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "../includes/minishell.h"
 
-int		builtin_exit(char **args, char **env)
-{		(void)args;(void)env;return 0;
+int		builtin_exit(struct s_msh_cmd *cur_node, char **env)
+{
+	size_t	i;
 
+	func_destroy_list(cur_node);
+	if (env != NULL)
+	{
+		i = 0;
+		while (env[i] != NULL)
+		{
+			free(env[i]);
+			++i;
+		}
+		free(env);
+	}
+	exit(EXIT_SUCCESS);
 }

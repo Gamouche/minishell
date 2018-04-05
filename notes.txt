@@ -24,7 +24,7 @@ kill ;
 exit
 
 
-echo, cd, setenv, unsetenv, env, exit
+echo, cd, (setenv), (unsetenv), env, exit
 
 
 ------------

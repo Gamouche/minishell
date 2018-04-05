@@ -10,9 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "../includes/minishell.h"
 
-int		builtin_env(char **args, char **env)
-{		(void)args;(void)env;return 0;
+int		builtin_env(char **args, char ***env)
+{
+	size_t	i;
 
+	(void)args;
+	i = 0;
+	if (env != NULL)
+		while ((*env)[i] != NULL)
+		{
+			write(STDOUT_FILENO, (*env)[i], ft_strlen((*env)[i]));
+			write(STDOUT_FILENO, "\n", 1);
+			++i;
+		}
+	return (BUILTIN_SUCCESS);
 }

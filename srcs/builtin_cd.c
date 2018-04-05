@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/stat.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include "../includes/minishell.h"
@@ -48,9 +49,10 @@ static bool		home_is_valid(char **env)
 
 int		go_to_dir(const char *path, char **env)
 {
-	int		ret_value;
-	int		ret_chdir;
-	size_t	i;
+	int			ret_value;
+	int			ret_chdir;
+	size_t		i;
+	struct stat	s_stat;
 
 	ret_value = BUILTIN_SUCCESS;
 	if (path != NULL)
@@ -64,6 +66,14 @@ int		go_to_dir(const char *path, char **env)
 	}
 	if (ret_chdir != 0)
 	{
+		if (stat(path, &s_stat) == 0)
+			if (!(S_ISDIR(s_stat.st_mode)))
+			{
+				write(STDERR_FILENO, "cd: not a directory: ", 21);
+				write(STDERR_FILENO, path, ft_strlen(path));
+				write(STDERR_FILENO, "\n", 1);
+				return (BUILTIN_ERROR);
+			}
 		write(STDERR_FILENO, "cd: No such file or directory: ", 31);
 		write(STDERR_FILENO, path, ft_strlen(path));
 		write(STDERR_FILENO, "\n", 1);
@@ -72,7 +82,7 @@ int		go_to_dir(const char *path, char **env)
 	return (ret_value);
 }
 
-int				builtin_cd(char **args, char **env)
+int				builtin_cd(char **args, char ***env)
 {
 	static char	last_dir[1024] = {0};
 	char		*cwd;
@@ -87,8 +97,8 @@ int				builtin_cd(char **args, char **env)
 		ft_exit(FATAL_ERROR, "Call to malloc() failed\n");
 	if (args == NULL)
 	{
-		if (home_is_valid(env) == true)
-			ret_value = go_to_dir(NULL, env);
+		if (home_is_valid(*env) == true)
+			ret_value = go_to_dir(NULL, *env);
 		else
 			ret_value = BUILTIN_SUCCESS;
 	}
@@ -99,10 +109,10 @@ int				builtin_cd(char **args, char **env)
 			if (last_dir[0] == '\0')
 				ret_value = BUILTIN_SUCCESS;
 			else
-				ret_value = go_to_dir(last_dir, env);
+				ret_value = go_to_dir(last_dir, *env);
 		}
 		else
-			ret_value = go_to_dir(args[0], env);
+			ret_value = go_to_dir(args[0], *env);
 	}
 
 	if (ret_value == BUILTIN_SUCCESS)
