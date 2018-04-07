@@ -85,7 +85,7 @@ void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 int					ft_isodd(int c);
 int					ft_iseven(int c);
-void				ft_del_2d_char_array(char ***array, size_t n);
+void				ft_del_2d_char_array(char ***array);
 char				*ft_str_remove_ch(char *str, int ch);
 int					ft_power(int nb, int power);
 int					ft_fruit(size_t n, ...);
@@ -108,5 +108,7 @@ char				*ft_itoa2(int64_t n, char *str);
 void				ft_exit(int exit_value, const char *msg);
 char				**ft_strsplit_bystr(const char *s, const char *split);
 int					ft_isspace(int c);
+ssize_t				ft_write_n_strings_fd(int fd, size_t n, ...);
+size_t				ft_get_nb_entities_2d_array(char **array);
 
 #endif

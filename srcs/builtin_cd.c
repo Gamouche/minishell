@@ -15,18 +15,6 @@
 #include <stdbool.h>
 #include "../includes/minishell.h"
 
-static size_t	get_nb_args(char **args)
-{
-	size_t	nb;
-
-	if (args == NULL)
-		return (0);
-	nb = 0;
-	while (args[nb] != NULL)
-		++nb;
-	return (nb);
-}
-
 static bool		home_is_valid(char **env)
 {
 	size_t	i;
@@ -74,9 +62,8 @@ int		go_to_dir(const char *path, char **env)
 				write(STDERR_FILENO, "\n", 1);
 				return (BUILTIN_ERROR);
 			}
-		write(STDERR_FILENO, "cd: No such file or directory: ", 31);
-		write(STDERR_FILENO, path, ft_strlen(path));
-		write(STDERR_FILENO, "\n", 1);
+		ft_write_n_strings_fd(STDERR_FILENO, 3,
+		"cd: No such file or directory: ", path, "\n");
 		ret_value = BUILTIN_ERROR;
 	}
 	return (ret_value);
@@ -88,7 +75,7 @@ int				builtin_cd(char **args, char ***env)
 	char		*cwd;
 	int			ret_value;
 
-	if (get_nb_args(args) > 1)
+	if (ft_get_nb_entities_2d_array(args) > 1)
 	{
 		write(STDERR_FILENO, "cd: Too many arguments\n", 23);
 		return (BUILTIN_ERROR);

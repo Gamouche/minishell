@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*   ft_get_nb_entities_2d_array.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/04 18:17:32 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/04/04 18:17:54 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/04/07 21:45:06 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/04/07 21:45:11 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "../includes/minishell.h"
+#include <stddef.h>
 
-int		builtin_exit(struct s_msh_cmd *cur_node, char **env)
+size_t	ft_get_nb_entities_2d_array(char **array)
 {
-	func_destroy_list(cur_node);
-	ft_del_2d_char_array(&env);
-	exit(EXIT_SUCCESS);
+	size_t	i;
+
+	if (array == NULL)
+		return (0);
+	i = 0;
+	while (array[i] != NULL)
+		++i;
+	return (i);
 }

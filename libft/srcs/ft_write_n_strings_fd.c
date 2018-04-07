@@ -1,21 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*   ft_write_n_strings_fd.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/04 18:17:32 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/04/04 18:17:54 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/04/07 20:48:40 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/04/07 20:48:41 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "../includes/minishell.h"
+#include <unistd.h>
+#include <stdarg.h>
+#include "../includes/libft.h"
 
-int		builtin_exit(struct s_msh_cmd *cur_node, char **env)
+ssize_t		ft_write_n_strings_fd(int fd, size_t n, ...)
 {
-	func_destroy_list(cur_node);
-	ft_del_2d_char_array(&env);
-	exit(EXIT_SUCCESS);
+	va_list		ap;
+	const char	*str;
+	ssize_t		ret;
+	ssize_t		tmp_ret;
+
+	va_start(ap, n);
+	ret = 0;
+	while (n > 0)
+	{
+		str = va_arg(ap, const char *);
+		if ((tmp_ret = write(fd, str, ft_strlen(str))) == -1)
+			return (-1);
+		ret += tmp_ret;
+		--n;
+	}
+	va_end(ap);
+	return (ret);
 }

@@ -42,6 +42,7 @@ int		builtin_cd(char **args, char ***env);
 **	builtin_setenv.c
 */
 int		builtin_setenv(char **args, char ***env);
+int		entry_already_exist(char **env, const char *entry);
 
 /*
 **	builtin_unsetenv.c

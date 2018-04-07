@@ -12,14 +12,14 @@
 
 #include <stdlib.h>
 
-void	ft_del_2d_char_array(char ***array, size_t n)
+void	ft_del_2d_char_array(char ***array)
 {
 	size_t	i;
 
-	if (array == NULL || *array == NULL)
+	if (array == NULL)
 		return ;
 	i = 0;
-	while (i < n && (*array)[i] != NULL)
+	while ((*array)[i] != NULL)
 	{
 		free((*array)[i]);
 		(*array)[i] = NULL;

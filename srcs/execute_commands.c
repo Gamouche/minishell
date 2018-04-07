@@ -19,7 +19,7 @@ static void	display_error_msg(const char *cmd_path, const char *cmd)
 	else if (cmd_path == CMD_NOPERM)
 		ft_putstr_fd("minishell: permission denied: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
-	ft_putchar('\n');
+	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
 static int	execute_one_command(struct s_msh_cmd *cur_node, char ***env)

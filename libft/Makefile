@@ -136,7 +136,9 @@ FILES = ft_strlen.c \
 		  ft_printf/srcs/conv/ft_regle_zero.c \
 		  ft_printf/srcs/conv/ft_arrondis_f.c \
 		  ft_printf/srcs/ft_strfreejoin.c \
-		  ft_isspace.c
+		  ft_isspace.c \
+		  ft_write_n_strings_fd.c \
+		  ft_get_nb_entities_2d_array.c 
 		  
 
 HFILES = includes/ft_printf.h \
