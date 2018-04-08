@@ -21,7 +21,7 @@ static char	**set_real_args(struct s_msh_cmd *cur_node)
 	size_t	nb_args;
 	size_t	i;
 
-	if (cur_node->args_cmd == NULL)
+	if ((!(i = 0)) && cur_node->args_cmd == NULL)
 	{
 		real_args = ft_malloc(sizeof(char *) * 2, FATAL_ERROR);
 		real_args[0] = cur_node->cmd;
@@ -35,7 +35,6 @@ static char	**set_real_args(struct s_msh_cmd *cur_node)
 		real_args = ft_malloc(sizeof(char *) * (nb_args + 2), FATAL_ERROR);
 		real_args[0] = cur_node->cmd;
 		real_args[nb_args + 1] = NULL;
-		i = 0;
 		while (cur_node->args_cmd[i] != NULL)
 		{
 			real_args[i + 1] = cur_node->args_cmd[i];
@@ -70,6 +69,16 @@ static int	get_program_ret_value(int status)
 	return (status);
 }
 
+static void	son_execute_prog(char *full_path, char **real_args, char **env,
+												struct s_msh_cmd *cur_node)
+{
+	execve(full_path, real_args, env);
+	ft_putstr_fd("minishell: exec format error: ", STDERR_FILENO);
+	ft_putstr_fd(cur_node->cmd, STDERR_FILENO);
+	ft_putchar('\n');
+	exit(1);
+}
+
 int			execute_program(struct s_msh_cmd *cur_node, const char *cmd_path,
 																char **env)
 {
@@ -85,13 +94,7 @@ int			execute_program(struct s_msh_cmd *cur_node, const char *cmd_path,
 	if ((fork_ret = fork()) == -1)
 		ft_exit(FATAL_ERROR, "Call to fork() failed\n");
 	if (fork_ret == 0)
-	{
-		execve(full_path, real_args, env);
-		ft_putstr_fd("minishell: exec format error: ", STDERR_FILENO);
-		ft_putstr_fd(cur_node->cmd, STDERR_FILENO);
-		ft_putchar('\n');
-		exit(0);
-	}
+		son_execute_prog(full_path, real_args, env, cur_node);
 	else
 	{
 		g_cmd_status.cmd_running = true;

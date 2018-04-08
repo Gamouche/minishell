@@ -52,14 +52,12 @@ int				go_to_dir(const char *path, char **env)
 	}
 	if (ret_chdir != 0)
 	{
-		if (stat(path, &s_stat) == 0)
-			if (!(S_ISDIR(s_stat.st_mode)))
-			{
-				write(STDERR_FILENO, "cd: not a directory: ", 21);
-				write(STDERR_FILENO, path, ft_strlen(path));
-				write(STDERR_FILENO, "\n", 1);
-				return (BUILTIN_ERROR);
-			}
+		if ((stat(path, &s_stat) == 0) && (!(S_ISDIR(s_stat.st_mode))))
+		{
+			ft_write_n_strings_fd(STDERR_FILENO, 3, "cd: not a directory: ",
+			path, "\n");
+			return (BUILTIN_ERROR);
+		}
 		ft_write_n_strings_fd(STDERR_FILENO, 3,
 		"cd: No such file or directory: ", path, "\n");
 		ret_value = BUILTIN_ERROR;
