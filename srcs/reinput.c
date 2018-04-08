@@ -60,7 +60,7 @@ struct s_msh_cmd	*complete_input_command(char **cmd_input, char **keep,
 		free(*keep);
 		return (PARSE_ERROR);
 	}
-	special_case_management(*cmd_input); // genre cmd1   &&  ; cmd2  => cmd2 a pour connection le AND et non le SEMICOLON
+	special_case_management(*cmd_input);
 	while (**cmd_input != 0)
 	{
 		while (**cmd_input == 0x20 || **cmd_input == 0x09
@@ -80,7 +80,7 @@ struct s_msh_cmd	*manage_arg_and_reinput(char **cmd_input,
 	struct s_get_cmd_list_var_norme_lol *variables, const char *tmp,
 	struct s_msh_cmd *ll_cmd)
 {
-	if (variables->cur_ll->cmd == NULL && tmp[0] != '\0') // si cest le premier mot de la cmd en fait
+	if (variables->cur_ll->cmd == NULL && tmp[0] != '\0')
 	{
 		if ((variables->cur_ll->cmd = ft_strdup(tmp)) == NULL)
 			ft_exit(FATAL_ERROR, "Call to malloc() failed\n");

@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_echo.c                                     :+:      :+:    :+:   */
+/*   signal_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/04 18:17:03 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/04/04 18:17:11 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/04/08 19:44:12 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/04/08 19:44:15 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
 #include <unistd.h>
+#include <signal.h>
+#include <stdbool.h>
 #include "../includes/minishell.h"
 
-int		builtin_echo(char **args, char ***env)
+void	signal_handler(int sig)
 {
-	size_t	index;
+	bool	was_running;
 
-	(void)env;
-	index = 0;
-	if (args != NULL)
-		while (args[index] != NULL)
+	was_running = g_cmd_status.cmd_running;
+	if (sig == SIGINT && g_cmd_status.cmd_running == true)
+	{
+		if (kill(g_cmd_status.pid, sig) == -1)
 		{
-			write(STDOUT_FILENO, args[index], ft_strlen(args[index]));
-			write(STDOUT_FILENO, " ", 1);
-			++index;
+			write(STDERR_FILENO, "minishell: Cannot kill pid: ", 28);
+			ft_putnbr_fd(sig, STDERR_FILENO);
+			write(STDERR_FILENO, "\n", 1);
 		}
+		else
+			g_cmd_status.cmd_running = false;
+	}
 	write(STDOUT_FILENO, "\n", 1);
-	return (BUILTIN_SUCCESS);
+	if (was_running == false)
+		msh_prompt(3);
 }

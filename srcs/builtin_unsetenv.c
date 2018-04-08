@@ -67,9 +67,7 @@ int			builtin_unsetenv(char **args, char ***env)
 		{
 			delete_entry(env, index);
 		}
-
 		--nb_entry;
 	}
-
 	return (BUILTIN_SUCCESS);
 }

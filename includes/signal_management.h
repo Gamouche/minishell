@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   search_cmd_path.h                                  :+:      :+:    :+:   */
+/*   signal_management.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cyfermie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/03 18:10:53 by cyfermie          #+#    #+#             */
-/*   Updated: 2018/04/03 18:10:59 by cyfermie         ###   ########.fr       */
+/*   Created: 2018/04/08 19:45:38 by cyfermie          #+#    #+#             */
+/*   Updated: 2018/04/08 19:45:38 by cyfermie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SEARCH_CMD_PATH_H
+#ifndef SIGNAL_MANAGEMENT_H
 
-# define SEARCH_CMD_PATH_H
+# define SIGNAL_MANAGEMENT_H
 
-# define CMD_NOPERM ((char *)-1)
-# define CMD_NOT_FOUND ((char *)-2)
+struct	s_cmd_status
+{
+	bool	cmd_running;
+	pid_t	pid;
+};
 
-/*
-**	search_cmd_path.c
-*/
-char	*search_cmd_path(const char *cmd, char **env);
+extern struct s_cmd_status		g_cmd_status;
 
-/*
-**	savage_cmd.c
-*/
-char	*test_savage_cmd(const char *cmd);
+void	signal_handler(int sig);
 
 #endif

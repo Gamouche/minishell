@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-size_t	get_nb_env_var(char **environ)
+size_t		get_nb_env_var(char **environ)
 {
 	size_t	i;
 
@@ -35,7 +35,7 @@ void		copy_environ(char **my_env, char **environ)
 	}
 }
 
-char			**init_my_env(char **environ)
+char		**init_my_env(char **environ)
 {
 	char		**my_env;
 	size_t		nb_env_var;
@@ -44,6 +44,5 @@ char			**init_my_env(char **environ)
 	my_env = ft_malloc(sizeof(char *) * (nb_env_var + 1), FATAL_ERROR);
 	my_env[nb_env_var] = NULL;
 	copy_environ(my_env, environ);
-
 	return (my_env);
 }

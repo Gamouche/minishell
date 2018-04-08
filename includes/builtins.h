@@ -27,7 +27,6 @@
 int		is_cmd_builtin(const char *cmd);
 int		execute_builtin(struct s_msh_cmd *cur_node, int index, char ***env);
 
-
 /*
 **	builtin_echo.c
 */

@@ -15,12 +15,13 @@
 #include <unistd.h>
 #include "../includes/minishell.h"
 
-static void			alloc_and_store(char **final_str, size_t old_size, size_t size, char tmp[])
+static void			alloc_and_store(char **final_str, size_t old_size,
+											size_t size, char tmp[])
 {
 	char	*tmp_ptr;
 
 	tmp_ptr = *final_str;
-	if ( (*final_str = ft_realloc(*final_str, old_size + 1, size + 1)) == NULL )
+	if ((*final_str = ft_realloc(*final_str, old_size + 1, size + 1)) == NULL)
 		ft_exit(FATAL_ERROR, "Call to malloc() failed\n");
 	if (tmp_ptr == NULL)
 		(*final_str)[0] = '\0';
@@ -40,7 +41,7 @@ char				*read_user_input(void)
 	old_size = 0;
 	while (1)
 	{
-		if ( (ret_read = read(STDIN_FILENO, tmp, sizeof(tmp) - 1)) == -1 )
+		if ((ret_read = read(STDIN_FILENO, tmp, sizeof(tmp) - 1)) == -1)
 			ft_exit(FATAL_ERROR, "Call to read() failed\n");
 		tmp[ret_read] = '\0';
 		size += ret_read;

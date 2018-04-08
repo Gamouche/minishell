@@ -14,12 +14,10 @@
 
 # define EXECUTE_PROGRAM_H
 
-
 /*
 **	execute_program.c
 */
-int		execute_program(struct s_msh_cmd *cur_node, const char *cmd_path, char **env);
-
-
+int		execute_program(struct s_msh_cmd *cur_node, const char *cmd_path,
+															char **env);
 
 #endif

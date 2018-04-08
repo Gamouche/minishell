@@ -27,7 +27,7 @@ struct s_msh_cmd	*init_first_node(struct s_msh_cmd **cur_ll)
 
 void				create_new_node(struct s_msh_cmd **cur_ll,
 								enum e_msh_connection connec)
-{									//printf("\t\tCREATION\n"); // eergr
+{
 	struct s_msh_cmd	*new_elem;
 
 	new_elem = ft_malloc(sizeof(*new_elem), FATAL_ERROR);

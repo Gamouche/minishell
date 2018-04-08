@@ -24,17 +24,17 @@ kill ;
 exit
 
 
-echo, cd, (setenv), (unsetenv), env, exit
+echo, cd, setenv, unsetenv, env, exit
 
 
 ------------
 WIFEXITED(status)
 
-Elle renvoie vrai si le statut provient d'un processus fils qui s'est terminé en quittant le main avecreturnou avec un appel àexit.
+Elle renvoie vrai si le statut provient d'un processus fils qui s'est terminé en quittant le main avecreturnou avec un appel à exit.
 
 WEXITSTATUS(status)
 
-Elle renvoie le code de retour du processus fils passé àexitou àreturn.
+Elle renvoie le code de retour du processus fils passé à exit ou à return.
 
 Cette macro est utilisable uniquement si vous avez utilisé WIFEXITED avant, et que cette dernière a renvoyé vrai.
 

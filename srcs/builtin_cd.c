@@ -33,9 +33,7 @@ static bool		home_is_valid(char **env)
 	return (false);
 }
 
-
-
-int		go_to_dir(const char *path, char **env)
+int				go_to_dir(const char *path, char **env)
 {
 	int			ret_value;
 	int			ret_chdir;
@@ -101,19 +99,8 @@ int				builtin_cd(char **args, char ***env)
 		else
 			ret_value = go_to_dir(args[0], *env);
 	}
-
 	if (ret_value == BUILTIN_SUCCESS)
 		ft_strcpy(last_dir, cwd);
 	free(cwd);
 	return (ret_value);
 }
-
-
-
-/*
-
-- algo simple : concatener pwd+ slash + argument, puis go dedans
-
-
-
-*/

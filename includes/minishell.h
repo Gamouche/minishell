@@ -25,13 +25,10 @@
 # include "search_cmd_path.h"
 # include "execute_program.h"
 # include "builtins.h"
+# include "signal_management.h"
 
 					#include <stdio.h> // debuggggggg
 
 # define FATAL_ERROR (2)
-
-
-
-
 
 #endif

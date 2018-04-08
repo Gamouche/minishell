@@ -16,7 +16,7 @@
 
 # include <stdbool.h>
 
-enum e_msh_connection
+enum				e_msh_connection
 {
 	MSH_CON_NONE,
 	MSH_CON_SEMICOLON,
@@ -24,14 +24,13 @@ enum e_msh_connection
 	MSH_CON_OR
 };
 
-struct s_msh_cmd
+struct				s_msh_cmd
 {
 	char					*cmd;
 	char					**args_cmd;
-	enum e_msh_connection 	connection;
+	enum e_msh_connection	connection;
 	struct s_msh_cmd		*next;
 };
-
 
 # define MSH_CMD_SEPARATORS (char[4]){0x20, 0x09, 0x0a, 0x00}
 # define CMD_EMPTY ((struct s_msh_cmd *)(-1))

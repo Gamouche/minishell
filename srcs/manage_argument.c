@@ -28,12 +28,12 @@ void		store_argument(struct s_msh_cmd *ll, const char *arg)
 	char			**tab_tmp;
 	size_t			i;
 
-	if (ll->args_cmd == NULL) {	//printf("PREMIER ARG A ALLOUER = |%s|\n", arg); // jksfdhgkjs
-		store_first_argument(ll, arg, &nb);   }
+	if (ll->args_cmd == NULL)
+		store_first_argument(ll, arg, &nb);
 	else
 	{
 		nb += 1;
-		tab_tmp = ll->args_cmd;				//printf("ALLOCATION POUR %zu ARGS\n", nb);
+		tab_tmp = ll->args_cmd;
 		ll->args_cmd = ft_malloc(sizeof(char *) * (nb + 1), FATAL_ERROR);
 		(ll->args_cmd)[nb] = NULL;
 		if (((ll->args_cmd)[nb - 1] = ft_strdup(arg)) == NULL)

@@ -54,10 +54,9 @@ int			execute_builtin(struct s_msh_cmd *cur_node, int index, char ***env)
 	int (*builtins_array[NB_BUILTINS - 1])(char **args, char ***env);
 
 	init_builtins_array(builtins_array);
-	if (index == BUILTIN_EXIT) // si c'est exit, qui est toujours la derniere fonction du tableau
+	if (index == BUILTIN_EXIT)
 		ret_value = builtin_exit(cur_node, *env);
 	else
 		ret_value = (*builtins_array[index])(cur_node->args_cmd, env);
 	return (ret_value);
 }
-
