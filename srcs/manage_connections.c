@@ -97,7 +97,5 @@ struct s_msh_cmd		*manage_connections(char **cmd_input,
 	}
 	else if (is_sep(**cmd_input))
 		manage_separators(variables, cmd_input);
-	else
-		printf("\t\t\t\tIF VIDE MDRRRRRR\n");
 	return (NULL);
 }
