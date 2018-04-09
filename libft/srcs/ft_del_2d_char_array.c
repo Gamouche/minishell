@@ -19,12 +19,13 @@ void	ft_del_2d_char_array(char ***array)
 	if (array == NULL)
 		return ;
 	i = 0;
-	while ((*array)[i] != NULL)
-	{
-		free((*array)[i]);
-		(*array)[i] = NULL;
-		++i;
-	}
+	if (*array != NULL)
+		while ((*array)[i] != NULL)
+		{
+			free((*array)[i]);
+			(*array)[i] = NULL;
+			++i;
+		}
 	free(*array);
 	*array = NULL;
 }

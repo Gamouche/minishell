@@ -18,7 +18,8 @@ void sighandler(int signum) {
 
 int main(void)
 {
-
+	printf("salut\n");
+	return 0;
 	signal(SIGINT, sighandler);
 	signal(SIGSEGV, sighandler);
 

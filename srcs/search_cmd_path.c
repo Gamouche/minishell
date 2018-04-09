@@ -97,21 +97,19 @@ char		*search_cmd_path(const char *cmd, char **env)
 	char	**cut_paths;
 	size_t	i;
 
-	if ((path_entry = get_path_entry(env)) == NULL)
-		return (CMD_NOT_FOUND);
-	if ((cut_paths = ft_strsplit(path_entry, ':')) == NULL)
-		ft_exit(FATAL_ERROR, "Call to malloc() failed\n");
-	ft_memmove(&(cut_paths[0][0]), &(cut_paths[0][5]),
-	ft_strlen(cut_paths[0]) - 4);
-	cmd_path = test_paths(cut_paths, cmd);
+	cmd_path = CMD_NOT_FOUND;
+	cut_paths = NULL;
+	if ((path_entry = get_path_entry(env)) != NULL)
+	{
+		if ((cut_paths = ft_strsplit(path_entry, ':')) == NULL)
+			ft_exit(FATAL_ERROR, "Call to malloc() failed\n");
+		ft_memmove(&(cut_paths[0][0]), &(cut_paths[0][5]),
+		ft_strlen(cut_paths[0]) - 4);
+		cmd_path = test_paths(cut_paths, cmd);
+	}
 	if (cmd_path == CMD_NOT_FOUND)
 		cmd_path = test_savage_cmd(cmd);
 	i = 0;
-	while (cut_paths[i] != NULL)
-	{
-		free(cut_paths[i]);
-		++i;
-	}
-	free(cut_paths);
+	ft_del_2d_char_array(&cut_paths);
 	return (cmd_path);
 }
