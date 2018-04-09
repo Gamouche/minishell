@@ -40,8 +40,7 @@ int				go_to_dir(const char *path, char **env)
 	size_t		i;
 	struct stat	s_stat;
 
-	ret_value = BUILTIN_SUCCESS;
-	if (path != NULL)
+	if ((!(ret_value = BUILTIN_SUCCESS)) && path != NULL)
 		ret_chdir = chdir(path);
 	else
 	{
@@ -52,17 +51,29 @@ int				go_to_dir(const char *path, char **env)
 	}
 	if (ret_chdir != 0)
 	{
-		if ((stat(path, &s_stat) == 0) && (!(S_ISDIR(s_stat.st_mode))))
-		{
-			ft_write_n_strings_fd(STDERR_FILENO, 3, "cd: not a directory: ",
-			path, "\n");
+		if ((stat(path, &s_stat) == 0) && (!(S_ISDIR(s_stat.st_mode)))
+		&& ft_write_n_strings_fd(STDERR_FILENO, 3, "cd: not a directory: ",
+		path, "\n"))
 			return (BUILTIN_ERROR);
-		}
 		ft_write_n_strings_fd(STDERR_FILENO, 3,
 		"cd: No such file or directory: ", path, "\n");
 		ret_value = BUILTIN_ERROR;
 	}
 	return (ret_value);
+}
+
+static	void	builtin_cd_2_norme_lol(char **args, char last_dir[],
+									int *ret_value, char ***env)
+{
+	if (ft_strcmp(args[0], "-") == 0)
+	{
+		if (last_dir[0] == '\0')
+			*ret_value = BUILTIN_SUCCESS;
+		else
+			*ret_value = go_to_dir(last_dir, *env);
+	}
+	else
+		*ret_value = go_to_dir(args[0], *env);
 }
 
 int				builtin_cd(char **args, char ***env)
@@ -86,17 +97,7 @@ int				builtin_cd(char **args, char ***env)
 			ret_value = BUILTIN_SUCCESS;
 	}
 	else
-	{
-		if (ft_strcmp(args[0], "-") == 0)
-		{
-			if (last_dir[0] == '\0')
-				ret_value = BUILTIN_SUCCESS;
-			else
-				ret_value = go_to_dir(last_dir, *env);
-		}
-		else
-			ret_value = go_to_dir(args[0], *env);
-	}
+		builtin_cd_2_norme_lol(args, last_dir, &ret_value, env);
 	if (ret_value == BUILTIN_SUCCESS)
 		ft_strcpy(last_dir, cwd);
 	free(cwd);
