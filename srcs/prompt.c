@@ -46,6 +46,13 @@ static void	display_arrow(int last_ret_value)
 	ft_putstr(arrow);
 }
 
+static void	prompt_error(int last_ret_value)
+{
+	ft_putstr_fd("Error while displaying the minishell\'s prompt\n",
+	STDERR_FILENO);
+	display_arrow(last_ret_value);
+}
+
 void		msh_prompt(int last_ret_value)
 {
 	char	*cut_cwd;
@@ -54,8 +61,10 @@ void		msh_prompt(int last_ret_value)
 
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
-		ft_exit(FATAL_ERROR,
-		"Error while displaying the minishell\'s prompt\n");
+	{
+		prompt_error(last_ret_value);
+		return ;
+	}
 	cut_cwd = cut_prompt_string(cwd);
 	prompt = ft_malloc(ft_strlen(cut_cwd) + ft_strlen(GREEN) + ft_strlen(BOLD) +
 	ft_strlen(EOC) + 1, FATAL_ERROR);

@@ -56,7 +56,7 @@ int				go_to_dir(const char *path, char **env)
 		path, "\n"))
 			return (BUILTIN_ERROR);
 		ft_write_n_strings_fd(STDERR_FILENO, 3,
-		"cd: No such file or directory: ", path, "\n");
+		"cd: No such file or directory or permission denied: ", path, "\n");
 		ret_value = BUILTIN_ERROR;
 	}
 	return (ret_value);
@@ -87,8 +87,7 @@ int				builtin_cd(char **args, char ***env)
 		write(STDERR_FILENO, "cd: Too many arguments\n", 23);
 		return (BUILTIN_ERROR);
 	}
-	if ((cwd = getcwd(NULL, 0)) == NULL)
-		ft_exit(FATAL_ERROR, "Call to malloc() failed\n");
+	cwd = getcwd(NULL, 0);
 	if (args == NULL)
 	{
 		if (home_is_valid(*env) == true)
@@ -98,7 +97,7 @@ int				builtin_cd(char **args, char ***env)
 	}
 	else
 		builtin_cd_2_norme_lol(args, last_dir, &ret_value, env);
-	if (ret_value == BUILTIN_SUCCESS)
+	if (ret_value == BUILTIN_SUCCESS && cwd != NULL)
 		ft_strcpy(last_dir, cwd);
 	free(cwd);
 	return (ret_value);
